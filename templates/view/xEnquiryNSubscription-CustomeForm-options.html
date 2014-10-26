@@ -1,0 +1,67 @@
+<div id='<?$_name?>' class='epan-component-options' component_type="<?$component_type?>">
+
+	<div class="panel-group" id="accordion">
+		<div class="xepan-collasp-header component-header">
+		 	<div class="panel-heading">
+		      	<h3 class="panel-title">
+		        	<a data-toggle="collapse" data-parent="#accordion"	 href="#collapse-enquiry-custom">
+						<?$component_type_name?>
+		        	</a>
+		      	</h3>
+		   	</div>
+		 	<div id="collapse-enquiry-custom" class="panel-			collapse collapse">
+		      	<div class="panel-body">
+		      		<div class='xepan-collasp-header'>
+						<table class="table table-condensed table-hover">
+						<tr>
+							<td>
+								<b>Enquiry Form:- </b>
+							</td>
+							<td>
+								<select id="xCustomeForm_layout_<?$id?>">		
+								</select>
+							</td>
+						</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div><button id='xEnquirySubscriptioncustomServerSide'>Server Side</button></div>
+
+</div>
+<script type="text/javascript">
+// ========== OPTION TO COMPONENT EFFECT ==============
+// 
+// $(your_option_html_element).click(function(event,ui){
+// 		$(current_selected_component).what to do ???
+// }) 
+
+$('#xEnquirySubscriptioncustomServerSide').click(function(event){
+	$('#epan-quick-component-options').toggle('slideup');
+	$.univ.frameURL('Custom Enquiry Form','index.php?page=xEnquiryNSubscription_page_owner_form')
+});
+
+$('#xCustomeForm_layout_<?$id?>').change(function(event) {
+	$(current_selected_component).attr('data-options',$(this).val());
+});
+
+var <?$component_type?>_options = {
+	show: function (){
+		// ===== THIS CODE RUNS EVERY TIME YOU DOUBLE CLICK YOUR COMPONENT
+		// TO TAKE VALUES FROM COMPONENT AND FILL OPTIONS
+		// 
+		// $(your_option_html_element).text($(current_selected_component).css('border'));
+		$.ajax({
+			url: 'index.php?page=xEnquiryNSubscription_page_getforms',
+			type: 'GET',
+			data: {},
+			success: function(data){
+				$('#xCustomeForm_layout_<?$id?>').html(data);
+
+			}
+		});
+	}
+}
+</script>
