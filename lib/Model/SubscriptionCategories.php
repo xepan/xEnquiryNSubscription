@@ -17,7 +17,6 @@ class Model_SubscriptionCategories extends \Model_Table {
 		$this->addExpression('total_emails')->set(function($m,$q){
 			return $m->refSQL('xEnquiryNSubscription/Subscription')->count();
 		})->type('int');
-
 		$this->addHook('beforeSave',$this);
 
 		$this->addCondition('epan_id',$this->api->current_website->id);
