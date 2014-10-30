@@ -22,7 +22,7 @@ class Model_EmailQueue extends \Model_Table {
 		
 	}
 
-	function process(){
+	function processSingle(){
 
 		if(!$this->mailer_object){
 			$mass_email = $this->add('xEnquiryNSubscription/Model_MassEmailConfiguration')->tryLoadAny();
@@ -51,6 +51,9 @@ class Model_EmailQueue extends \Model_Table {
 		$email = $this['subscriber_id']?$this->ref('subscriber_id')->get('email'):$this['email'];
 		$mailer->send($email,null,$news_letter->get('email_subject'),$news_letter->get('matter'),"");
 		$this['is_sent']=true;
+
+		$this->ref('emailjobs_id')->set('processed',true)->save();
+
 		$this->saveAndUnload();
 
 		// $news_letter->destroy();

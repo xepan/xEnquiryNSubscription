@@ -15,16 +15,25 @@ class Model_EmailJobs extends \Model_Table {
 		// $this->addField('email');
 		$this->addField('job_posted_at')->type('datetime')->defaultValue(date('Y-m-d H:i:s'));
 		$this->addField('processed')->type('boolean')->defaultValue(false);
-		$this->addField('processed_on')->type('datetime')->defaultValue(date('Y-m-d H:i:s'));
+		$this->addField('processed_on')->type('datetime')->defaultValue(null);
 
-		$this->addField('post_socials_and_blogs')->type('boolean')->defaultValue(false);
+		// $this->addField('post_socials_and_blogs')->type('boolean')->defaultValue(false);
 
 		$this->addExpression('processed_in_hour')->set('DATE_FORMAT(processed_on,"%Y-%m-%d %H:00:00")');
 
 		$this->hasMany('xEnquiryNSubscription/EmailQueue','emailjobs_id');
 		
+		$this->addHook('beforeSave',$this);
+
 		// $this->add('dynamic_model/Controller_AutoCreator');
 	
 	}
+
+	function beforeSave(){
+		if($this->dirty['processed'] and $this['processed']==true){
+			$this['processed_on'] = date('Y-m-d H:i:s');
+		}
+	}
+
 
 }
