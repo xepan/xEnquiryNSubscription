@@ -59,6 +59,11 @@ class View_Tools_SubscriptionModule extends \componentBase\View_Component{
 			$check_existing->addCondition('email',$form['email']);
 			$check_existing->tryLoadAny();
 			if($check_existing->loaded()){
+
+				if($check_existing['is_bounced']){
+					$form->displayError('email','This Address is supposed to bounce');
+				}
+
 				if(!$check_existing['send_news_letters'] and $config_model['allow_re_subscribe']){
 					$check_existing['send_news_letters']=true;
 					$check_existing->save();
