@@ -20,9 +20,13 @@ class page_xEnquiryNSubscription_page_install extends page_componentBase_page_in
 			);
 
 		foreach ($model_array as $md) {
-			$model = $this->add('xEnquiryNSubscription/'.$md);
-			$model->add('dynamic_model/Controller_AutoCreator');
-			$model->tryLoadAny();
+			try{
+				$model = $this->add('xEnquiryNSubscription/'.$md);
+				$model->add('dynamic_model/Controller_AutoCreator');
+				$model->tryLoadAny();
+			}catch(Exception_DB $e){
+				echo $e->getMessage();
+			}
 		}
 
 
