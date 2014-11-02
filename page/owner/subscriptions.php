@@ -210,8 +210,10 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 			$q['emailjobs_id'] = $new_job->id;
 			$q['email'] = $single_form['email_id'];
 			$q->save();
-			$q->processSingle();
-			$single_form->js(null,$single_form->js()->univ()->successMessage('Done'))->reload()->execute();
+			if($q->processSingle())
+				$single_form->js(null,$single_form->js()->univ()->successMessage('Done'))->reload()->execute();
+			else
+				$single_form->js(null,$single_form->js()->univ()->errorMessage('Error'))->reload()->execute();
 		}
 
 	}

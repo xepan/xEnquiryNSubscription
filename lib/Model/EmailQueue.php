@@ -49,13 +49,16 @@ class Model_EmailQueue extends \Model_Table {
 		}
 
 		$email = $this['subscriber_id']?$this->ref('subscriber_id')->get('email'):$this['email'];
-		$mailer->send($email,null,$news_letter->get('email_subject'),$news_letter->get('matter'),"");
+		if(!$mailer->send($email,null,$news_letter->get('email_subject'),$news_letter->get('matter'),"")){
+			return false;
+		}
 		$this['is_sent']=true;
 
 		$this->ref('emailjobs_id')->set('processed',true)->save();
 
 		$this->saveAndUnload();
 
+		return true;
 		// $news_letter->destroy();
 		// if(method_exists($mailer, 'destroy'))
 			// $mailer->destroy();
