@@ -12,12 +12,21 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 		$tabs= $this->add('Tabs');
 
 		$subscription_cat_tab = $tabs->addTab('Categories');
-		$subscriptions_tab = $tabs->addTab('Subscriptions');
+		$subscriptions_tab = $tabs->addTab('Total Subscriptions');
 		
 		$subscriptions_cat_curd = $subscription_cat_tab->add('CRUD');
 		$subscriptions_cat_curd->setModel('xEnquiryNSubscription/SubscriptionCategories');
 
+		$cat_ref_subs_crud = $subscriptions_cat_curd->addRef('xEnquiryNSubscription/Subscription',array('label'=>'Subscribers'));
+
+		if($cat_ref_subs_crud and $cat_ref_subs_crud->grid){
+			$cat_ref_subs_crud->grid->addPaginator(100);
+			$cat_ref_subs_crud->grid->addQuickSearch(array('email'));
+		}
+
 		if($g=$subscriptions_cat_curd->grid){
+			$g->addPaginator(20);
+			$g->addQuickSearch(array('name'));
 			$g->addColumn('Expander','config');
 		}
 
@@ -38,11 +47,11 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 			$g->addOrder()->move('sno','first')->now();
 
 			$subscriptions_curd->grid->addPaginator(100);
+			$subscriptions_curd->grid->addQuickSearch(array('email'));
 			$subscriptions_curd->grid->addButton('Upload Data')->js('click')->univ()->frameURL('Data Upload',$this->api->url('./upload'));
 		}
 
-		$news_letter_tab = $tabs->addTabURL($this->api->url('./newsletter'),'News Letters');
-		$email_config = $tabs->addTabURL($this->api->url('./emailconfig'),'Email Configuration');
+		// $email_config = $tabs->addTabURL($this->api->url('./emailconfig'),'Email Configuration');
 		
 	}
 
@@ -89,29 +98,29 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 		if($g=$newsletter_crud->grid){
 			$g->addColumn('Expander','send');
 			// $g->addColumn('Expander','update','Edit');
-			$btn=$g->addButton('Start Processing News Letters');
-			if($btn->isClicked()){
-				// ===== Actual Email Sending
-				$this->js()->univ()->frameURL('Sending Emails',$this->api->url('xEnquiryNSubscription_page_emailexec'))->execute();
+			// $btn=$g->addButton('Start Processing News Letters');
+			// if($btn->isClicked()){
+			// 	// ===== Actual Email Sending
+			// 	$this->js()->univ()->frameURL('Sending Emails',$this->api->url('xEnquiryNSubscription_page_emailexec'))->execute();
 				
-			}
+			// }
 		}
 
 	}
 
-	function page_emailconfig(){
-		$mass_email=$this->add('xEnquiryNSubscription/Model_MassEmailConfiguration');
-		$mass_email->tryLoadAny();
+	// function page_emailconfig(){
+	// 	$mass_email=$this->add('xEnquiryNSubscription/Model_MassEmailConfiguration');
+	// 	$mass_email->tryLoadAny();
 
-		$form=$this->add('Form');
-		$form->addSubmit('Update');
-		$form->setModel($mass_email);
+	// 	$form=$this->add('Form');
+	// 	$form->addSubmit('Update');
+	// 	$form->setModel($mass_email);
 
-		if($form->isSubmitted()){
-			$form->update();
-			$form->js(null,$form->js()->univ()->successMessage('Updated'))->reload()->execute();
-		}
-	}
+	// 	if($form->isSubmitted()){
+	// 		$form->update();
+	// 		$form->js(null,$form->js()->univ()->successMessage('Updated'))->reload()->execute();
+	// 	}
+	// }
 
 	// function page_newsletter_update(){
 	// 	$this->api->stickyGET('xEnquiryNSubscription_NewsLetter_id');
@@ -135,7 +144,7 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 
 		$tabs = $this->add('Tabs');
 		$mass_email_tab = $tabs->addTab('Mass Emails');
-
+		$mass_email_tab->add('View_Error')->set("This will add Emails to Queue to be processed by xMarketingCampain Application");
 
 		$form = $mass_email_tab->add('Form');
 		$crud= $mass_email_tab->add('CRUD');
@@ -183,6 +192,7 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 		// ================ SINGLE EMAIL
 
 		$single_email_tab = $tabs->addTab('Send To Single');
+		$single_email_tab->add('View_Info')->set('This Email will be send immidiate and will not be pending in Queue');
 		$single_form = $single_email_tab->add('Form');
 		$single_form->addField('line','email_id')->validateNotNull();
 		$single_form->addField('CheckBox','also_add_to_category');
@@ -209,8 +219,10 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 			$q['emailjobs_id'] = $new_job->id;
 			$q['email'] = $single_form['email_id'];
 			$q->save();
-			$q->process();
-			$single_form->js(null,$single_form->js()->univ()->successMessage('Done'))->reload()->execute();
+			if($q->processSingle())
+				$single_form->js(null,$single_form->js()->univ()->successMessage('Done'))->reload()->execute();
+			else
+				$single_form->js(null,$single_form->js()->univ()->errorMessage('Error'))->reload()->execute();
 		}
 
 	}

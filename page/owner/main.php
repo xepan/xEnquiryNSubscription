@@ -9,6 +9,7 @@ class page_xEnquiryNSubscription_page_owner_main extends page_componentBase_page
 			$tabs = $this->add('Tabs');
 			$s_tab = $tabs->addTabUrl('xEnquiryNSubscription_page_owner_subscriptions','Subscription Section');
 			$s_tab = $tabs->addTabUrl('xEnquiryNSubscription_page_owner_form','Custom Form Section');
+			$news_letter_tab = $tabs->addTabURL($this->api->url('xEnquiryNSubscription_page_owner_subscriptions_newsletter'),'News Letters');
 		}
 	}
 

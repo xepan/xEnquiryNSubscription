@@ -1,4 +1,4 @@
 xEnquiryNSubscription
 =====================
 
-Enquiry and Subscription tools with Newsletter. A lot of activities in xEpan CMS are Based on this component
+xEpan Application for Subscriptions and NewsLetters. Application is also having Cutom Enquiry form with data stoe as well as email options.

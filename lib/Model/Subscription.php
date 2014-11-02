@@ -17,6 +17,11 @@ class Model_Subscription extends \Model_Table {
 		$this->addField('subscribed_on')->type('datetime')->defaultValue(date('Y-m-d H:i:s'));
 		$this->addField('send_news_letters')->type('boolean')->defaultValue(true);
 
+		$this->addField('is_bounced')->type('boolean')->defaultValue(false);
+
+		$this->addField('from_app');
+		$this->addField('from_id')->type('int');
+
 		$this->addExpression('name')->set('email');
 
 		$this->addHook('beforeSave',$this);
