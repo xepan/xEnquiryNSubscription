@@ -12,12 +12,21 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 		$tabs= $this->add('Tabs');
 
 		$subscription_cat_tab = $tabs->addTab('Categories');
-		$subscriptions_tab = $tabs->addTab('Subscriptions');
+		$subscriptions_tab = $tabs->addTab('Total Subscriptions');
 		
 		$subscriptions_cat_curd = $subscription_cat_tab->add('CRUD');
 		$subscriptions_cat_curd->setModel('xEnquiryNSubscription/SubscriptionCategories');
 
+		$cat_ref_subs_crud = $subscriptions_cat_curd->addRef('xEnquiryNSubscription/Subscription',array('label'=>'Subscribers'));
+
+		if($cat_ref_subs_crud and $cat_ref_subs_crud->grid){
+			$cat_ref_subs_crud->grid->addPaginator(100);
+			$cat_ref_subs_crud->grid->addQuickSearch(array('email'));
+		}
+
 		if($g=$subscriptions_cat_curd->grid){
+			$g->addPaginator(20);
+			$g->addQuickSearch(array('name'));
 			$g->addColumn('Expander','config');
 		}
 
@@ -38,10 +47,10 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 			$g->addOrder()->move('sno','first')->now();
 
 			$subscriptions_curd->grid->addPaginator(100);
+			$subscriptions_curd->grid->addQuickSearch(array('email'));
 			$subscriptions_curd->grid->addButton('Upload Data')->js('click')->univ()->frameURL('Data Upload',$this->api->url('./upload'));
 		}
 
-		$news_letter_tab = $tabs->addTabURL($this->api->url('./newsletter'),'News Letters');
 		// $email_config = $tabs->addTabURL($this->api->url('./emailconfig'),'Email Configuration');
 		
 	}
