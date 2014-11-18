@@ -22,11 +22,11 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 			$subscriptions_cat_curd->add_button->setIcon('ui-icon-plusthick');
 		}
 
-		$cat_ref_subs_crud = $subscriptions_cat_curd->addRef('xEnquiryNSubscription/Subscription',array('label'=>'Subscribers'));
+		$cat_ref_subs_crud = $subscriptions_cat_curd->addRef('xEnquiryNSubscription/Model_SubscriptionCategoryAssociation',array('label'=>'Subscribers'));
 
 		if($cat_ref_subs_crud and $cat_ref_subs_crud->grid){
 			$cat_ref_subs_crud->grid->addPaginator(100);
-			$cat_ref_subs_crud->grid->addQuickSearch(array('email'));
+			$cat_ref_subs_crud->grid->addQuickSearch(array('subscriber'));
 		}
 
 		if($g=$subscriptions_cat_curd->grid){
@@ -43,7 +43,7 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 
 	function page_total_subscriptions(){
 		$subscriptions_curd = $this->add('CRUD');
-		$subscriptions_curd->setModel('xEnquiryNSubscription/Subscription')->setOrder('subscribed_on','desc');
+		$subscriptions_curd->setModel('xEnquiryNSubscription/Model_Subscription');
 		if($g = $subscriptions_curd->grid){
 			$g->sno=1;
 			$g->addMethod('format_sno',function($grid,$field){
@@ -62,6 +62,14 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 			$subscriptions_curd->grid->addQuickSearch(array('email'));
 			$subscriptions_curd->grid->addButton('Upload Data')->js('click')->univ()->frameURL('Data Upload',$this->api->url('./upload'));
 		}
+
+		$cat_ref_subs_crud = $subscriptions_curd->addRef('xEnquiryNSubscription/Model_SubscriptionCategoryAssociation',array('label'=>'Categories'));
+
+		if($cat_ref_subs_crud and $cat_ref_subs_crud->grid){
+			$cat_ref_subs_crud->grid->addPaginator(100);
+			$cat_ref_subs_crud->grid->addQuickSearch(array('category'));
+		}
+
 	}
 
 	function page_config(){
@@ -248,20 +256,22 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 						$new_category = $this->add('xEnquiryNSubscription/Model_SubscriptionCategories');
 						$new_category['name'] = $d['Category'];
 						$new_category->save();
-						
 						$stored_categories[$new_category->id] = $new_category['name'];
-
-						$new_category->destroy();
+					}else{
+						$new_category->load(array_search($d['Category'], $stored_categories));
 					}
 
 					$new_subscription = $this->add('xEnquiryNSubscription/Model_Subscription');
-					$new_subscription->addCondition('category_id', array_search($d['Category'], $stored_categories));
 					$new_subscription->addCondition('email', $d['Email']);
 					$new_subscription->tryLoadAny();
 					$new_subscription['send_news_letters'] = $d['Send News Letters'];
 					$new_subscription['subscribed_on'] = date('Y-m-d',strtotime($d['Subscribed On']));
-					$new_subscription->saveAndUnload();
+					$new_subscription->save();
 
+					$new_category->addSubscriber($new_subscription);
+					
+					$new_category->destroy();
+					$new_subscription->destroy();
 				}
 
 				$this->add('View_Info')->set(count($data).' Recored Imported');

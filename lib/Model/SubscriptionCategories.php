@@ -13,11 +13,11 @@ class Model_SubscriptionCategories extends \Model_Table {
 		$f=$this->addField('is_active')->type('boolean')->defaultValue(true)->group('a~4');
 		$f->icon='fa fa-exclamation~blue';
 
-		$this->hasMany('xEnquiryNSubscription/Subscription','category_id');
 		$this->hasMany('xEnquiryNSubscription/HostsTouched','category_id');
+		$this->hasMany('xEnquiryNSubscription/Model_SubscriptionCategoryAssociation','category_id');
 
 		$this->addExpression('total_emails')->set(function($m,$q){
-			return $m->refSQL('xEnquiryNSubscription/Subscription')->count();
+			return $m->refSQL('xEnquiryNSubscription/Model_SubscriptionCategoryAssociation')->count();
 		})->type('int');
 		
 		$this->addHook('beforeSave',$this);
@@ -43,6 +43,42 @@ class Model_SubscriptionCategories extends \Model_Table {
 		$config = $this->add('xEnquiryNSubscription/Model_SubscriptionConfig');
 		$config['category_id'] = $new_id;
 		$config->save();
+	}
+
+	function hasSubscriber($subscriber){
+		if(!$this->loaded()) throw $this->exception('Must be called on loaded Subscriber Category Model');
+		if($subscriber instanceof Subscription) throw $this->exception('Subscriber Must be instance of Subscription Model');
+
+		if(!$subscriber->loaded()) throw $this->exception('Subscriber Must be LOADED instance of Subscription Model');
+
+		$asso = $this->add('xEnquiryNSubscription/Model_SubscriptionCategoryAssociation');
+		$asso->addCondition('category_id',$this->id);
+		$asso->addCondition('subscription_id',$subscriber->id);
+		$asso->tryLoadAny();
+
+		if($asso->loaded())
+			return $asso;
+		else
+			return false;
+
+	}
+
+	function addSubscriber($subscriber){
+		if(!$this->loaded()) throw $this->exception('Must be called on loaded Subscriber Category Model');
+		if($subscriber instanceof Subscription) throw $this->exception('Subscriber Must be instance of Subscription Model');
+
+		if(!$subscriber->loaded()) throw $this->exception('Subscriber Must be LOADED instance of Subscription Model');
+
+		$asso = $this->add('xEnquiryNSubscription/Model_SubscriptionCategoryAssociation');
+		$asso->addCondition('category_id',$this->id);
+		$asso->addCondition('subscription_id',$subscriber->id);
+		$asso->tryLoadAny();
+
+		$asso['send_news_letters']=true;
+		$asso->save();
+
+		return $this;
+
 	}
 
 }

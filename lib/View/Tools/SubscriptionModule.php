@@ -55,26 +55,27 @@ class View_Tools_SubscriptionModule extends \componentBase\View_Component{
 			}
 
 			$check_existing = $this->add('xEnquiryNSubscription/Model_Subscription');
-			$check_existing->addCondition('category_id',$category->id);
 			$check_existing->addCondition('email',$form['email']);
 			$check_existing->tryLoadAny();
-			if($check_existing->loaded()){
-
+			
+			if(!$check_existing->loaded()){
+				// No email found like this in records ... saving now
+				$check_existing->save();
+			}else{
+				// Already in database
 				if($check_existing['is_bounced']){
 					$form->displayError('email','This Address is supposed to bounce');
 				}
 
-				if(!$check_existing['send_news_letters'] and $config_model['allow_re_subscribe']){
-					$check_existing['send_news_letters']=true;
-					$check_existing->save();
-				}else{
-					if(!$config_model['allow_re_subscribe'])
+				if($ex=$category->hasSubscriber($check_existing)){
+					if(!$config_model['allow_re_subscribe']){
 						$form->displayError('email','Already Subscribed');
+					}
 				}
-			}else{
-				$form->model['category_id'] = $category->id;
-				$form->update();
 			}
+
+			$category->addSubscriber($check_existing);
+		
 
 			$js=array();
 

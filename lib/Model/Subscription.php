@@ -10,19 +10,21 @@ class Model_Subscription extends \Model_Table {
 		$this->hasOne('Epan','epan_id');
 		$this->addCondition('epan_id',$this->api->current_website->id);
 		
-		$this->hasOne('xEnquiryNSubscription/SubscriptionCategories','category_id');
+		// $this->hasOne('xEnquiryNSubscription/SubscriptionCategories','category_id');
 
 		$this->addField('email')->mandatory(true);
 		$this->addField('ip')->caption('IP');
-		$this->addField('subscribed_on')->type('datetime')->defaultValue(date('Y-m-d H:i:s'));
-		$this->addField('send_news_letters')->type('boolean')->defaultValue(true);
+		$this->addField('created_at')->type('datetime')->defaultValue(date('Y-m-d H:i:s'));
+		// $this->addField('send_news_letters')->type('boolean')->defaultValue(true);
 
 		$this->addField('is_bounced')->type('boolean')->defaultValue(false);
 
-		$this->addField('from_app');
-		$this->addField('from_id')->type('int');
+		$this->addField('from_app')->system(true);
+		$this->addField('from_id')->type('int')->system(true);
 
 		$this->addExpression('name')->set('email');
+
+		$this->hasMany('xEnquiryNSubscription/Model_SubscriptionCategoryAssociation','subscriber_id');
 
 		$this->addHook('beforeSave',$this);
 
