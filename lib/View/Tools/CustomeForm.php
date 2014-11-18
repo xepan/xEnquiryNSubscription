@@ -58,7 +58,7 @@ class View_Tools_CustomeForm extends \componentBase\View_Component{
 				}
 
 				
-				if($custome_field['is_expandable']){		
+				if(in_array($custome_field['type'],array('radio','dropdown'))){		
 					$new_arr =explode(',', $custome_field['set_value']);
 					$to_put=array();
 					foreach ($new_arr as $value) {
@@ -70,7 +70,7 @@ class View_Tools_CustomeForm extends \componentBase\View_Component{
 			if($form_model['button_name'])
 				$form->addSubmit($form_model['button_name']);
 			else{
-				$form->addSubmit('go');
+				$form->addSubmit('Submit');
 			}
 
 			if($form->isSubmitted()){

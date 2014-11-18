@@ -8,8 +8,10 @@ class Model_SubscriptionCategories extends \Model_Table {
 		parent::init();
 
 		$this->hasOne('Epan','epan_id');
-		$this->addField('name');
-		$this->addField('is_active')->type('boolean')->defaultValue(true);
+		$f=$this->addField('name')->mandatory(true)->group('a~8');
+		$f->icon='fa fa-folder~red';
+		$f=$this->addField('is_active')->type('boolean')->defaultValue(true)->group('a~4');
+		$f->icon='fa fa-exclamation~blue';
 
 		$this->hasMany('xEnquiryNSubscription/Subscription','category_id');
 		$this->hasMany('xEnquiryNSubscription/HostsTouched','category_id');

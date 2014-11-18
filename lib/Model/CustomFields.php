@@ -10,24 +10,27 @@ class Model_CustomFields extends \Model_Table{
 
 		// $this->hasOne('Epan','epan_id');	
 		$this->hasOne('xEnquiryNSubscription/Forms','forms_id');
-		$this->addField('name')->caption('Field Name')->mandatory(true);
+		$f=$this->addField('name')->caption('Field Name')->mandatory(true)->group('a~6~Basic Details');
+		$f->icon='fa fa-adn~red';
 
-		$type=$this->addField('type')->setValueList(array(
-													'Number'=>'INTEGER',
-													'line'=>'LINE',
-													'text'=>'TEXT',
-													'password'=>'PASSWORD',
-													'radio'=>'radio', 
-													'checkbox'=>'checkbox',
-													'dropdown'=>'DROPDOWN',
-													'DatePicker'=>'DATE',
-													'Upload'=>'UPLOAD',
+		$f=$type=$this->addField('type')->setValueList(array(
+													'Number'=>'Number',
+													'line'=>'Line',
+													'text'=>'Text',
+													'password'=>'Password',
+													'radio'=>'Radio', 
+													'checkbox'=>'Checkbox',
+													'dropdown'=>'Dropdown',
+													'DatePicker'=>'Date',
+													'Upload'=>'Upload',
 													'captcha'=>'Captcha'))
-									->mandatory(true);
-
-		$this->addField('is_expandable')->type('boolean')->defaultValue(false);
-		$this->addField('set_value')->hint('Comma Separated Values i.e. Male, Female, Other');
-		$this->addField('mandatory')->type('boolean')->Caption('Requird Field');
+									->mandatory(true)->group('a~4');
+		$f->icon ='fa fa-question~red';
+		$f=$this->addField('mandatory')->type('boolean')->Caption('Requird Field')->group('a~2');
+		$f->icon='fa fa-exclamation~blue';
+		// $f=$this->addField('is_expandable')->type('boolean')->defaultValue(false)->group('b~4~Extended Information');
+		$f=$this->addField('set_value')->hint('Comma Separated Values i.e. Male, Female, Other')->group('b~12~Extended Information');
+		$f->icon='';
 		// $this->addCondition('epan_id',$this->api->current_website->id);
 		// $this->add('dynamic_model/Controller_AutoCreator');
 

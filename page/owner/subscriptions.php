@@ -12,10 +12,15 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 		$tabs= $this->add('Tabs');
 
 		$subscription_cat_tab = $tabs->addTab('Categories');
-		$subscriptions_tab = $tabs->addTab('Total Subscriptions');
+		$subscriptions_tab = $tabs->addTabUrl("./total_subscriptions",'Total Subscriptions');
 		
 		$subscriptions_cat_curd = $subscription_cat_tab->add('CRUD');
 		$subscriptions_cat_curd->setModel('xEnquiryNSubscription/SubscriptionCategories');
+		$subscriptions_cat_curd->add('Controller_FormBeautifier');
+
+		if($g=$subscriptions_cat_curd->grid){
+			$subscriptions_cat_curd->add_button->setIcon('ui-icon-plusthick');
+		}
 
 		$cat_ref_subs_crud = $subscriptions_cat_curd->addRef('xEnquiryNSubscription/Subscription',array('label'=>'Subscribers'));
 
@@ -30,7 +35,14 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 			$g->addColumn('Expander','config');
 		}
 
-		$subscriptions_curd = $subscriptions_tab->add('CRUD');
+		
+
+		// $email_config = $tabs->addTabURL($this->api->url('./emailconfig'),'Email Configuration');
+		
+	}
+
+	function page_total_subscriptions(){
+		$subscriptions_curd = $this->add('CRUD');
 		$subscriptions_curd->setModel('xEnquiryNSubscription/Subscription')->setOrder('subscribed_on','desc');
 		if($g = $subscriptions_curd->grid){
 			$g->sno=1;
@@ -50,9 +62,6 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 			$subscriptions_curd->grid->addQuickSearch(array('email'));
 			$subscriptions_curd->grid->addButton('Upload Data')->js('click')->univ()->frameURL('Data Upload',$this->api->url('./upload'));
 		}
-
-		// $email_config = $tabs->addTabURL($this->api->url('./emailconfig'),'Email Configuration');
-		
 	}
 
 	function page_config(){
@@ -94,50 +103,15 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 
 		$newsletter_crud = $this->add('CRUD',array('allow_edit'=>true));
 		$newsletter_crud->setModel($newsletter_model);
-		
+		$newsletter_crud->add('Controller_FormBeautifier');
+
 		if($g=$newsletter_crud->grid){
 			$g->addColumn('Expander','send');
-			// $g->addColumn('Expander','update','Edit');
-			// $btn=$g->addButton('Start Processing News Letters');
-			// if($btn->isClicked()){
-			// 	// ===== Actual Email Sending
-			// 	$this->js()->univ()->frameURL('Sending Emails',$this->api->url('xEnquiryNSubscription_page_emailexec'))->execute();
-				
-			// }
+			$newsletter_crud->add_button->setIcon('ui-icon-plusthick');
 		}
 
 	}
 
-	// function page_emailconfig(){
-	// 	$mass_email=$this->add('xEnquiryNSubscription/Model_MassEmailConfiguration');
-	// 	$mass_email->tryLoadAny();
-
-	// 	$form=$this->add('Form');
-	// 	$form->addSubmit('Update');
-	// 	$form->setModel($mass_email);
-
-	// 	if($form->isSubmitted()){
-	// 		$form->update();
-	// 		$form->js(null,$form->js()->univ()->successMessage('Updated'))->reload()->execute();
-	// 	}
-	// }
-
-	// function page_newsletter_update(){
-	// 	$this->api->stickyGET('xEnquiryNSubscription_NewsLetter_id');
-
-	// 	$newsletter_model = $this->add('xEnquiryNSubscription/Model_NewsLetter');
-	// 	$newsletter_model->load($_GET['xEnquiryNSubscription_NewsLetter_id']);
-
-	// 	$form = $this->add('Form');
-	// 	$form->setModel($newsletter_model);
-	// 	$form->addSubmit('Update');
-
-	// 	if($form->isSubmitted()){
-	// 		$form->update();
-	// 		$form->js(null,$form->js()->univ()->successMessage('Updated'))->reload()->execute();
-	// 	}
-
-	// }
 
 	function page_newsletter_send(){
 		$this->api->stickyGET('xEnquiryNSubscription_NewsLetter_id');
@@ -154,6 +128,8 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 		$subscription_field->setEmptyText('Please select a category')->validateNotNull();
 		$form->addField('CheckBox','include_unsubscribed_members_too');
 		$form->addSubmit('Add To job');
+
+		$form->add('Controller_FormBeautifier');
 		
 		if($form->isSubmitted()){
 			$subscribers = $this->add('xEnquiryNSubscription/Model_Subscription');
