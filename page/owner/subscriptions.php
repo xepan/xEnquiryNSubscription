@@ -33,6 +33,7 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 			$g->addPaginator(20);
 			$g->addQuickSearch(array('name'));
 			$g->addColumn('Expander','config');
+			$g->addTotals(array('total_emails'));
 		}
 
 		
@@ -116,6 +117,25 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 		if($g=$newsletter_crud->grid){
 			$g->addColumn('Expander','send');
 			$newsletter_crud->add_button->setIcon('ui-icon-plusthick');
+			
+			$btn=$g->addButton("");
+			
+			if($btn->isClicked()){
+				$this->js()->univ()->frameURL('Executing Email Sending Process',$this->api->url('xEnquiryNSubscription_page_emailexec'))->execute();
+			}
+
+			$email_to_process = $this->add('xEnquiryNSubscription/Model_EmailQueue');
+			$email_to_process->addCondition('is_sent',false);
+			$email_to_process->setOrder('id','asc');
+			$email_to_process->setOrder('emailjobs_id','asc');
+
+			$job_j = $email_to_process->join('xEnquiryNSubscription_EmailJobs','emailjobs_id');
+			$job_j->addField('process_via');
+			$email_to_process->addCondition('process_via','xEnquiryNSubscription');
+			$pending_count = $email_to_process->count()->getOne();
+
+			$btn->set("Start Processing Sending, Now ($pending_count)");
+
 		}
 
 	}
@@ -141,12 +161,17 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 		
 		if($form->isSubmitted()){
 			$subscribers = $this->add('xEnquiryNSubscription/Model_Subscription');
+			$asso_j = $subscribers->join('xEnquiryNSubscription_SubsCatAss.subscriber_id');
+			$asso_j->addField('category_id');
+			$asso_j->addField('send_news_letters');
+
 			$subscribers->addCondition('category_id',$form['subscriptions']);
 			if(!$form['include_unsubscribed_members_too'])
 				$subscribers->addCondition('send_news_letters',true);
 			
 			$new_job = $this->add('xEnquiryNSubscription/Model_EmailJobs');
 			$new_job['newsletter_id'] = $_GET['xEnquiryNSubscription_NewsLetter_id'];
+			$new_job['process_via']='xEnquiryNSubscription';
 			$new_job->save();
 
 			$q= $this->add('xEnquiryNSubscription/Model_EmailQueue');

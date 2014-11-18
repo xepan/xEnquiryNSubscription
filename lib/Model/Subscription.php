@@ -23,7 +23,6 @@ class Model_Subscription extends \Model_Table {
 		$this->addField('from_id')->type('int')->system(true);
 
 		$this->addExpression('name')->set('email');
-
 		$this->hasMany('xEnquiryNSubscription/Model_SubscriptionCategoryAssociation','subscriber_id');
 
 		$this->addHook('beforeSave',$this);

@@ -53,7 +53,7 @@ class Model_SubscriptionCategories extends \Model_Table {
 
 		$asso = $this->add('xEnquiryNSubscription/Model_SubscriptionCategoryAssociation');
 		$asso->addCondition('category_id',$this->id);
-		$asso->addCondition('subscription_id',$subscriber->id);
+		$asso->addCondition('subscriber_id',$subscriber->id);
 		$asso->tryLoadAny();
 
 		if($asso->loaded())
@@ -71,7 +71,7 @@ class Model_SubscriptionCategories extends \Model_Table {
 
 		$asso = $this->add('xEnquiryNSubscription/Model_SubscriptionCategoryAssociation');
 		$asso->addCondition('category_id',$this->id);
-		$asso->addCondition('subscription_id',$subscriber->id);
+		$asso->addCondition('subscriber_id',$subscriber->id);
 		$asso->tryLoadAny();
 
 		$asso['send_news_letters']=true;
