@@ -10,7 +10,7 @@ class Model_EmailQueue extends \Model_Table {
 		parent::init();
 
 		$this->hasOne('xEnquiryNSubscription/EmailJobs','emailjobs_id');
-		$this->hasOne('xEnquiryNSubscription/Subscription','subscriber_id');
+		$this->hasOne('xEnquiryNSubscription/Subscription','subscriber_id')->display(array('form'=>'autocomplete/Basic'));
 		$this->addField('email');
 		$this->addField('sent_at')->defaultValue(date('Y-m-d H:i:s'))->type('datetime');
 		$this->addField('is_sent')->type('boolean')->defaultValue(false);

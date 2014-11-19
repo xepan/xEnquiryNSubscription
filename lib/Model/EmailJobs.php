@@ -15,6 +15,10 @@ class Model_EmailJobs extends \Model_Table {
 		$this->addField('job_posted_at')->type('datetime')->defaultValue(date('Y-m-d H:i:s'));
 		$this->addField('processed_on')->type('datetime')->defaultValue(null);
 
+		$this->addExpression('name')->set(function($m,$q){
+			return $m->refSQL('newsletter_id')->fieldQuery('name');
+		});
+
 		$this->addField('process_via')->system(true);
 
 		$this->addExpression('processed_in_hour')->set('DATE_FORMAT(processed_on,"%Y-%m-%d %H:00:00")');

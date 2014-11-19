@@ -24,9 +24,16 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 
 		$cat_ref_subs_crud = $subscriptions_cat_curd->addRef('xEnquiryNSubscription/Model_SubscriptionCategoryAssociation',array('label'=>'Subscribers'));
 
+		if($cat_ref_subs_crud){
+			$cat_ref_subs_crud->add('Controller_FormBeautifier');
+		}
+
 		if($cat_ref_subs_crud and $cat_ref_subs_crud->grid){
+			$cat_ref_subs_crud->grid->addClass('panel panel-default');
+			$cat_ref_subs_crud->grid->addStyle('padding','20px');
 			$cat_ref_subs_crud->grid->addPaginator(100);
 			$cat_ref_subs_crud->grid->addQuickSearch(array('subscriber'));
+			$cat_ref_subs_crud->add_button->setIcon('ui-icon-plusthick');
 		}
 
 		if($g=$subscriptions_cat_curd->grid){
@@ -46,6 +53,7 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 		$subscriptions_curd = $this->add('CRUD');
 		$subscriptions_curd->setModel('xEnquiryNSubscription/Model_Subscription');
 		if($g = $subscriptions_curd->grid){
+			$subscriptions_curd->add_button->seticon('ui-icon-plusthick');
 			$g->sno=1;
 			$g->addMethod('format_sno',function($grid,$field){
 				$skip=0;
@@ -61,12 +69,21 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 
 			$subscriptions_curd->grid->addPaginator(100);
 			$subscriptions_curd->grid->addQuickSearch(array('email'));
-			$subscriptions_curd->grid->addButton('Upload Data')->js('click')->univ()->frameURL('Data Upload',$this->api->url('./upload'));
+			$upl_btn=$subscriptions_curd->grid->addButton('Upload Data');
+			$upl_btn->setIcon('ui-icon-arrowthick-1-n');
+			$upl_btn->js('click')->univ()->frameURL('Data Upload',$this->api->url('./upload'));
 		}
+		$subscriptions_curd->add('Controller_FormBeautifier');
 
 		$cat_ref_subs_crud = $subscriptions_curd->addRef('xEnquiryNSubscription/Model_SubscriptionCategoryAssociation',array('label'=>'Categories'));
 
+		if($cat_ref_subs_crud){
+			$cat_ref_subs_crud->add('Controller_FormBeautifier');
+		}
+
 		if($cat_ref_subs_crud and $cat_ref_subs_crud->grid){
+			$cat_ref_subs_crud->add_button->setIcon('ui-icon-plusthick');
+			$cat_ref_subs_crud->grid->addClass('panel panel-default')->addStyle('padding','10px');
 			$cat_ref_subs_crud->grid->addPaginator(100);
 			$cat_ref_subs_crud->grid->addQuickSearch(array('category'));
 		}
@@ -77,7 +94,11 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 
 		$this->api->stickyGET('xEnquiryNSubscription_Subscription_Categories_id');
 
-		$config_form = $this->add('Form');
+		$v=$this->add('View');
+		$v->addClass('panel panel-danger');
+		$v->addStyle('padding','20px');
+
+		$config_form = $v->add('Form');
 		$config_model=$this->add('xEnquiryNSubscription/Model_SubscriptionConfig');
 		$config_model->addCondition('category_id',$_GET['xEnquiryNSubscription_Subscription_Categories_id']);
 		$config_model->tryLoadAny();
@@ -90,14 +111,7 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 			$config_form->js()->reload()->execute();
 		}
 
-		// $config_form->getElement('email_body')->js(true)->_load('tinymce/xepan.tinymce')->univ()->xtinymce();
-		// $config_form->getElement('email_body')->js(true)->tinymce(array('script_url'=>'templates/js/tinymce/tinymce.min.js',
-		// 	'toolbar1'=>'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-		// 	'toolbar2' => 'print preview media | forecolor backcolor emoticons',
-		// 	'image_advtab' =>true, 
-		// 	'plugins'=> 'advlist autolink lists link image charmap print preview hr anchor pagebreak searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking save table contextmenu directionality emoticons template paste textcolor',
-		// 	'file_browser_callback'=> $this->js()->alert('HI')->_enclose()
-		// 	));
+		$config_form->add('Controller_FormBeautifier',array('modifier'=>'default'));
 
 	}
 
@@ -134,8 +148,10 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 			$email_to_process->addCondition('process_via','xEnquiryNSubscription');
 			$pending_count = $email_to_process->count()->getOne();
 
+			$btn->setIcon('ui-icon-seek-end');
 			$btn->set("Start Processing Sending, Now ($pending_count)");
-
+			$btn->addClass('processing_btn');
+			$btn->js('reload')->reload();
 		}
 
 	}
@@ -144,12 +160,21 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 	function page_newsletter_send(){
 		$this->api->stickyGET('xEnquiryNSubscription_NewsLetter_id');
 
-		$tabs = $this->add('Tabs');
+		$v= $this->add('View');
+		$v->addClass('panel panel-default');
+		$v->addStyle('padding','20px');
+
+		$tabs = $v->add('Tabs');
 		$mass_email_tab = $tabs->addTab('Mass Emails');
-		$mass_email_tab->add('View_Error')->set("This will add Emails to Queue to be processed by xMarketingCampain Application");
+		// $mass_email_tab->add('View_Error')->set("This will add Emails to Queue to be processed by xMarketingCampain Application");
 
 		$form = $mass_email_tab->add('Form');
-		$crud= $mass_email_tab->add('CRUD');
+		
+		$mass_email_tab->add('H4')->set('Existing Queue');
+
+		$crud= $mass_email_tab->add('CRUD',array('allow_edit'=>false));
+		$crud->addClass('panel panel-default');
+		$crud->addStyle('margin-top','10px');
 
 		$subscription_field = $form->addField('DropDown','subscriptions');
 		$subscription_field->setModel('xEnquiryNSubscription/SubscriptionCategories');
@@ -180,11 +205,13 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 				$q['subscriber_id'] = $subscribers->id;
 				$q->saveAndUnload();
 			}
-			if($crud->grid) $crud->grid->js()->reload()->execute();
+			if($crud->grid) {
+				$crud->grid->js(null,$this->js()->_selector('.processing_btn')->trigger('reload'))->reload()->execute();
+			}
 		}
 
 		$existing_jobs = $this->add('xEnquiryNSubscription/Model_EmailQueue');
-		$job_j = $existing_jobs->join('xEnquiryNSubscription_EmailJobs','emailjobs_id');
+		$job_j = $existing_jobs->leftJoin('xEnquiryNSubscription_EmailJobs','emailjobs_id');
 		$job_j->addField('newsletter_id');
 		$existing_jobs->addCondition('newsletter_id',$_GET['xEnquiryNSubscription_NewsLetter_id']);
 		$existing_jobs->setOrder('id','desc');
@@ -196,12 +223,18 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 		$category_join->addField('under_category','name');
 
 		$crud->setModel($existing_jobs);
-		if($crud->grid) $crud->grid->addPaginator(50);
+
+		if($crud->grid){
+			// $form=$crud->grid->add('Form',null,'grid_buttons',array('form_horizontal'));
+			// $form->addField('DropDown','top_1');
+			$crud->add_button->setIcon('ui-icon-plusthick');
+			$crud->grid->addPaginator(50);
+			$crud->grid->addQuickSearch(array('emailjobs','subscriber','email'));
+		}
 
 		// ================ SINGLE EMAIL
 
 		$single_email_tab = $tabs->addTab('Send To Single');
-		$single_email_tab->add('View_Info')->set('This Email will be send immidiate and will not be pending in Queue');
 		$single_form = $single_email_tab->add('Form');
 		$single_form->addField('line','email_id')->validateNotNull();
 		$single_form->addField('CheckBox','also_add_to_category');

@@ -5,7 +5,7 @@ class page_xEnquiryNSubscription_page_owner_dashboard extends page_xEnquiryNSubs
 	function init(){
 		parent::init();
 
-		echo "hi";
+		echo "hi, still working on something better !!!";
 	}
 
 }

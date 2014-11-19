@@ -5,7 +5,7 @@ class page_xEnquiryNSubscription_page_owner_form extends page_xEnquiryNSubscript
 		parent::init();
 
 
-		$this->add('H4')->setHTML('Manage Your Custom Forms <small>and their filled data</small>');
+		$this->add('H4')->setHTML('Manage Your Custom Forms <small>And submitted data</small>');
 		$crud=$this->add('CRUD');
 		$crud->setModel('xEnquiryNSubscription/Model_Forms');
 		$crud->add('Controller_FormBeautifier');

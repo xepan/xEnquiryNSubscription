@@ -7,17 +7,23 @@ class Model_Subscription extends \Model_Table {
 	function init(){
 		parent::init();
 
-		$this->hasOne('Epan','epan_id');
+		$this->hasOne('Epan','epan_id')->system(true);
 		$this->addCondition('epan_id',$this->api->current_website->id);
 		
 		// $this->hasOne('xEnquiryNSubscription/SubscriptionCategories','category_id');
 
-		$this->addField('email')->mandatory(true);
-		$this->addField('ip')->caption('IP');
-		$this->addField('created_at')->type('datetime')->defaultValue(date('Y-m-d H:i:s'));
+		$f=$this->addField('email')->mandatory(true)->group('a~10');
+		$f->icon='fa fa-envelope~blue';
+
+		$f=$this->addField('is_bounced')->type('boolean')->defaultValue(false)->group('a~2');
+		$f->icon='fa fa-exclamation~blue';
+		
+		$f=$this->addField('ip')->caption('IP')->group('b~6');
+		$f->icon = 'fa fa-desktop~blue';
+		$f=$this->addField('created_at')->type('datetime')->defaultValue(date('Y-m-d H:i:s'))->group('b~6');
+		$f->icon ='fa fa-calendar~blue';
 		// $this->addField('send_news_letters')->type('boolean')->defaultValue(true);
 
-		$this->addField('is_bounced')->type('boolean')->defaultValue(false);
 
 		$this->addField('from_app')->system(true);
 		$this->addField('from_id')->type('int')->system(true);

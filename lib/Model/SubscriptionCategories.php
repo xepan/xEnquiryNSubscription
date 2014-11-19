@@ -7,7 +7,7 @@ class Model_SubscriptionCategories extends \Model_Table {
 	function init(){
 		parent::init();
 
-		$this->hasOne('Epan','epan_id');
+		$this->hasOne('Epan','epan_id')->system(true);
 		$f=$this->addField('name')->mandatory(true)->group('a~8');
 		$f->icon='fa fa-folder~red';
 		$f=$this->addField('is_active')->type('boolean')->defaultValue(true)->group('a~4');

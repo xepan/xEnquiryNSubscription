@@ -8,13 +8,18 @@ class Model_SubscriptionCategoryAssociation extends \Model_Table {
 	function init(){
 		parent::init();
 
-		$this->hasOne('xEnquiryNSubscription/SubscriptionCategories','category_id');
-		$this->hasOne('xEnquiryNSubscription/Subscription','subscriber_id')->display(array('form'=>'autocomplete/Plus'));
+		$f=$this->hasOne('xEnquiryNSubscription/SubscriptionCategories','category_id');
+		$f->icon= 'fa fa-folder~red';
+		$f=$this->hasOne('xEnquiryNSubscription/Subscription','subscriber_id')->display(array('form'=>'autocomplete/Plus'));
+		$f->icon= 'fa fa-folder~red';
 
-		$this->addField('subscribed_on')->type('datetime')->defaultValue(date('Y-m-d H:i:s'));
-		$this->addField('last_updated_on')->type('datetime')->defaultValue(date('Y-m-d H:i:s'));
+		$f=$this->addField('subscribed_on')->type('datetime')->defaultValue(date('Y-m-d H:i:s'))->group('a~4');
+		$f->icon='fa fa-calander~blue';
+		$f=$this->addField('last_updated_on')->type('datetime')->defaultValue(date('Y-m-d H:i:s'))->group('a~4');
+		$f->icon='fa fa-calander~blue';
 		
-		$this->addField('send_news_letters')->type('boolean')->defaultValue(true);
+		$f=$this->addField('send_news_letters')->type('boolean')->defaultValue(true)->group('a~4');
+		$f->icon='fa fa-exclamation~blue';
 
 		$this->addHook('beforeSave',$this);
 
