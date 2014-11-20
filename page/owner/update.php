@@ -16,6 +16,7 @@ class page_xEnquiryNSubscription_page_owner_update extends page_componentBase_pa
 			'Model_SubscriptionCategories',
 			'Model_Subscription',
 			'Model_SubscriptionConfig',
+			'Model_SubscriptionCategoryAssociation',
 			'Model_NewsLetter',
 			'Model_Forms',
 			'Model_EmailJobs',
@@ -23,7 +24,7 @@ class page_xEnquiryNSubscription_page_owner_update extends page_componentBase_pa
 			'Model_CustomFormEntry',
 			'Model_CustomFields',
 			'Model_MassEmailConfiguration',
-			'Model_HostsTouched'
+			'Model_HostsTouched',
 			);
 
 		foreach ($model_array as $md) {
