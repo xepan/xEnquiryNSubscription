@@ -13,10 +13,10 @@ class page_xEnquiryNSubscription_page_owner_update extends page_componentBase_pa
 		$this->update(false);
 
 		$model_array=array(
+			'Model_SubscriptionCategoryAssociation',
 			'Model_SubscriptionCategories',
 			'Model_Subscription',
 			'Model_SubscriptionConfig',
-			'Model_SubscriptionCategoryAssociation',
 			'Model_NewsLetter',
 			'Model_Forms',
 			'Model_EmailJobs',
