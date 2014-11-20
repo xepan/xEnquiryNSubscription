@@ -18,7 +18,7 @@ class Model_EmailQueue extends \Model_Table {
 		$this->addField('is_read')->type('boolean')->defaultValue(false);
 		$this->addField('is_clicked')->type('boolean')->defaultValue(false);
 
-		$this->add('dynamic_model/Controller_AutoCreator');
+		// $this->add('dynamic_model/Controller_AutoCreator');
 		
 	}
 
