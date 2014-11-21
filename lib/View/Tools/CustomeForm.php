@@ -79,10 +79,9 @@ class View_Tools_CustomeForm extends \componentBase\View_Component{
 				if(!$form_model['receipent_email_id'])
 					$this->js()->univ()->errorMessage('Please Insert Receipent Email id')->execute();
 
-				$epan=$this->add('Model_Epan');
-				$form_entry_model=$this->add('xEnquiryNSubscription/Model_CustomFormEntry');
+				$epan=$this->api->current_website;
 
-				$epan->tryLoadAny();
+				$form_entry_model=$this->add('xEnquiryNSubscription/Model_CustomFormEntry');
 				$tm=$this->add( 'TMail_Transport_PHPMailer' );
 			
 				$msg=$this->add( 'SMLite' );
