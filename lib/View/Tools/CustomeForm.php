@@ -123,6 +123,9 @@ class View_Tools_CustomeForm extends \componentBase\View_Component{
 					}
 				}
 
+				$message_model=$this->add('Model_Message');	
+				$message_model->createNew($this->api->current_website->id,"Custom Form Entry","Submitted : ". $form_model['name'],"Custom Enquiry Form");	
+
 				$goal_uuid = array(array('uuid'=>$form_model['name']));
 				$this->api->exec_plugins('goal',$goal_uuid);
 					

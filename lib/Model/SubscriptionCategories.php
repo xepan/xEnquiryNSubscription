@@ -77,7 +77,7 @@ class Model_SubscriptionCategories extends \Model_Table {
 		$asso['send_news_letters']=true;
 		$asso->save();
 
-		return $this;
+		return $asso;
 
 	}
 

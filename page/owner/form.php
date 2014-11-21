@@ -15,7 +15,14 @@ class page_xEnquiryNSubscription_page_owner_form extends page_xEnquiryNSubscript
 		}
 
 		$refcrud=$crud->addRef('xEnquiryNSubscription/CustomFields',array('label'=>'Add Fields'));
-
+		$form_values = $crud->addRef('xEnquiryNSubscription/CustomFormEntry',array('label'=>'Submissions','view_options'=>array('allow_add'=>false)));
+ 
+		if($form_values and $form_values->grid){
+			$form_values->grid->addClass('panel panel-default');
+			$form_values->grid->setStyle('padding','20px');
+			$form_values->grid->addPaginator(50);
+			$form_values->grid->addQuickSearch(array('message'));
+		}
 
 		if($refcrud and $refcrud->grid){
 			$refcrud->add_button->setIcon('ui-icon-plusthick');

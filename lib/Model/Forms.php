@@ -20,6 +20,7 @@ class Model_Forms extends \Model_Table{
 		$f->icon='fa fa-envelope~blue';
 
 		$this->hasMany('xEnquiryNSubscription/CustomFields','forms_id');
+		$this->hasMany('xEnquiryNSubscription/CustomFormEntry','forms_id');
 
 		// $this->add('dynamic_model/Controller_AutoCreator');
 	}
