@@ -187,7 +187,7 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 		if($form->isSubmitted()){
 			$subscribers = $this->add('xEnquiryNSubscription/Model_Subscription');
 			$asso_j = $subscribers->join('xEnquiryNSubscription_SubsCatAss.subscriber_id');
-			$asso_j->addField('category_id');
+			// $asso_j->addField('category_id');
 			$asso_j->addField('send_news_letters');
 
 			$subscribers->addCondition('category_id',$form['subscriptions']);
@@ -219,7 +219,8 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 		$subscriber_join = $existing_jobs->leftJoin('xEnquiryNSubscription_Subscription','subscriber_id');
 		// $subscriber_join->addField('subscriber','name');
 
-		$category_join = $subscriber_join->leftJoin('xEnquiryNSubscription_Subscription_Categories','category_id');
+		$subscriber_asso = $subscriber_join->leftJoin('xEnquiryNSubscription_SubsCatAss.subscriber_id');
+		$category_join = $subscriber_asso->leftJoin('xEnquiryNSubscription_Subscription_Categories','category_id');
 		$category_join->addField('under_category','name');
 
 		$crud->setModel($existing_jobs);
