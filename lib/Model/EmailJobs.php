@@ -26,6 +26,7 @@ class Model_EmailJobs extends \Model_Table {
 		$this->hasMany('xEnquiryNSubscription/EmailQueue','emailjobs_id');
 		
 		$this->addHook('beforeSave',$this);
+		$this->addHook('beforeDelete',$this);
 
 		// $this->add('dynamic_model/Controller_AutoCreator');
 	
@@ -35,6 +36,10 @@ class Model_EmailJobs extends \Model_Table {
 		if($this->dirty['processed'] and $this['processed']==true){
 			$this['processed_on'] = date('Y-m-d H:i:s');
 		}
+	}
+
+	function beforeDelete(){
+		$this->ref('xEnquiryNSubscription/EmailQueue')->deleteAll();
 	}
 
 
