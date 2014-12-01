@@ -21,7 +21,12 @@ class Model_Forms extends \Model_Table{
 
 		$this->hasMany('xEnquiryNSubscription/CustomFields','forms_id');
 		$this->hasMany('xEnquiryNSubscription/CustomFormEntry','forms_id');
-
+		$this->addHook('beforeDelete',$this);
 		// $this->add('dynamic_model/Controller_AutoCreator');
+	}
+
+	function beforeDelete(){
+		$this->ref('xEnquiryNSubscription/CustomFields')->deleteAll();
+		$this->ref('xEnquiryNSubscription/CustomFormEntry')->deleteAll();
 	}
 }

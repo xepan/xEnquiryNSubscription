@@ -27,6 +27,13 @@ class Model_SubscriptionCategoryAssociation extends \Model_Table {
 	}
 
 	function beforeSave(){
+		$temp=$this->add('xEnquiryNSubscription/Model_SubscriptionCategoryAssociation');
+		$temp->addCondition('category_id',$this['category_id']);
+		$temp->addCondition('subscriber_id',$this['subscriber_id']);
+		$temp->tryLoadAny();
+		if($temp->loaded())
+			throw $this->exception("Already Associated","ValidityCheck")->setField('subscriber_id');
 		$this['last_updated_on']=date('Y-m-d H:i:s');
+
 	}
 }

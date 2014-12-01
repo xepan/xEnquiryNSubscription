@@ -17,8 +17,9 @@ class Model_NewsLetter extends \Model_Table {
 		// $this->addField('short_description')->display(array('grid'=>'shorttext,wrap'));//->hint('255 Characters Msg for social and tweets');
 		$this->addField('email_subject')->mandatory(true)->group('a~12~<i/> NewsLetter');
 		$this->addField('matter')->type('text')->display(array('form'=>'RichText'))->defaultValue('<p></p>')->group('a~12~bl')->mandatory(true);
-
+		$this->hasMany('xEnquiryNSubscription/EmailJobs','newsletter_id');
 		$this->addHook('beforeSave',$this);
+		$this->addHook('beforeDelete',$this);
 
 		// $this->add('dynamic_model/Controller_AutoCreator');
 	}
@@ -26,6 +27,15 @@ class Model_NewsLetter extends \Model_Table {
 	function beforeSave(){
 		if($this['matter']=='<p></p>')
 			throw $this->exception('Matter is mandatory field','ValidityCheck')->setField('matter');
+	}
+	function beforeDelete(){
+		$jobs=$this->ref('xEnquiryNSubscription/EmailJobs');
+		foreach($jobs as $junk){
+			$jobs->delete();
+		}
+
+		$this->api->event('xenq_n_subs_newletter_before_delete',$this);
+
 	}
 
 }
