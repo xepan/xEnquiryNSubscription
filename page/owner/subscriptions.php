@@ -249,9 +249,19 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 					$single_form->displayError('add_to_category','Select Category');
 
 				$subs = $this->add('xEnquiryNSubscription/Model_Subscription');
-				$subs['category_id'] = $single_form['add_to_category'];
-				$subs['email'] = $single_form['email_id'];
-				$subs->save();
+				$subs->addCondition('email',$single_form['email_id']);
+				$subs->tryLoadAny();
+
+				if(!$subs->loaded()){
+					// $subs['category_id'] = $single_form['add_to_category'];
+					$subs['email'] = $single_form['email_id'];
+					$subs->save();
+				}
+
+				$cat = $this->add('xEnquiryNSubscription/Model_SubscriptionCategories');
+				$cat->load($single_form['add_to_category']);
+				$cat->addSubscriber($subs);
+
 			}
 
 			$new_job = $this->add('xEnquiryNSubscription/Model_EmailJobs');
