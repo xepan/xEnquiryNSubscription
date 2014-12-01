@@ -22,6 +22,7 @@ class Model_SubscriptionCategories extends \Model_Table {
 		
 		$this->addHook('beforeSave',$this);
 		$this->addHook('afterInsert',$this);
+		$this->addHook('beforeDelete',$this);
 
 		$this->addCondition('epan_id',$this->api->current_website->id);
 
@@ -80,5 +81,8 @@ class Model_SubscriptionCategories extends \Model_Table {
 		return $asso;
 
 	}
-
+	
+	function beforeDelete(){
+	 	$this->ref('xEnquiryNSubscription/Model_SubscriptionCategoryAssociation')->deleteAll();
+	}
 }

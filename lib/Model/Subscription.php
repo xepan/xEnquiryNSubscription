@@ -32,6 +32,7 @@ class Model_Subscription extends \Model_Table {
 		$this->hasMany('xEnquiryNSubscription/Model_SubscriptionCategoryAssociation','subscriber_id');
 
 		$this->addHook('beforeSave',$this);
+		$this->addHook('beforeDelete',$this);
 
 		// $this->add('dynamic_model/Controller_AutoCreator');
 
@@ -50,5 +51,8 @@ class Model_Subscription extends \Model_Table {
 			$this['ip'] = $ip;
 		}
 
+	}
+	function beforeDelete(){
+		$this->ref('xEnquiryNSubscription/Model_SubscriptionCategoryAssociation')->deleteAll();
 	}
 }
