@@ -8,12 +8,12 @@ class Model_SubscriptionCategoryAssociation extends \Model_Table {
 	function init(){
 		parent::init();
 
-		$f=$this->hasOne('xEnquiryNSubscription/SubscriptionCategories','category_id');
+		$f=$this->hasOne('xEnquiryNSubscription/SubscriptionCategories','category_id')->sortable(true);
 		$f->icon= 'fa fa-folder~red';
-		$f=$this->hasOne('xEnquiryNSubscription/Subscription','subscriber_id')->display(array('form'=>'autocomplete/Plus'));
+		$f=$this->hasOne('xEnquiryNSubscription/Subscription','subscriber_id')->display(array('form'=>'autocomplete/Plus'))->sortable(true);
 		$f->icon= 'fa fa-folder~red';
 
-		$f=$this->addField('subscribed_on')->type('datetime')->defaultValue(date('Y-m-d H:i:s'))->group('a~4');
+		$f=$this->addField('subscribed_on')->type('datetime')->defaultValue(date('Y-m-d H:i:s'))->group('a~4')->sortable(true);
 		$f->icon='fa fa-calander~blue';
 		$f=$this->addField('last_updated_on')->type('datetime')->defaultValue(date('Y-m-d H:i:s'))->group('a~4');
 		$f->icon='fa fa-calander~blue';

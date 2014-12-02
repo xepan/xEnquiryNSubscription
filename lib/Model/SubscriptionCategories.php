@@ -8,7 +8,7 @@ class Model_SubscriptionCategories extends \Model_Table {
 		parent::init();
 
 		$this->hasOne('Epan','epan_id')->system(true);
-		$f=$this->addField('name')->mandatory(true)->group('a~8');
+		$f=$this->addField('name')->mandatory(true)->group('a~8')->sortable(true);
 		$f->icon='fa fa-folder~red';
 		$f=$this->addField('is_active')->type('boolean')->defaultValue(true)->group('a~4');
 		$f->icon='fa fa-exclamation~blue';
@@ -18,7 +18,7 @@ class Model_SubscriptionCategories extends \Model_Table {
 
 		$this->addExpression('total_emails')->set(function($m,$q){
 			return $m->refSQL('xEnquiryNSubscription/Model_SubscriptionCategoryAssociation')->count();
-		})->type('int');
+		})->type('int')->sortable(true);
 		
 		$this->addHook('beforeSave',$this);
 		$this->addHook('afterInsert',$this);
