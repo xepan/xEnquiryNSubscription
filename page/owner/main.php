@@ -16,7 +16,7 @@ class page_xEnquiryNSubscription_page_owner_main extends page_componentBase_page
 			$menu=$this->add('Menu');
 
 			$dashboard = $menu->addMenuItem('xEnquiryNSubscription_page_owner_dashboard','Dashboard');
-			$subs = $menu->addSubMenu('Subscription Section  <i class="fa fa-user"></i>');
+			$subs = $menu->addSubMenu('Subscription Section  <i class="fa fa-arrow-circle-down"></i>');
 			
 			$subs->addMenuItem('xEnquiryNSubscription_page_owner_subscriptions_categories','Categories');
 			$subs->addMenuItem('xEnquiryNSubscription_page_owner_subscriptions_total_subscriptions','Total Subscribers');
