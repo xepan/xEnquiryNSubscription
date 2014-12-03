@@ -16,11 +16,12 @@ class Model_Forms extends \Model_Table{
 		// $this->addField('value')->hint('Comma Separated Values i.e. Red, Green, Blue');
 		$f=$this->addField('receive_mail')->type('boolean')->group('b~4~<i class="fa fa-envelope"/> Send Email also!');
 		$f->icon='fa fa-exclamation~blue';
-		$f=$this->addField('receipent_email_id')->mandatory(true)->group('b~8');
+		$f=$this->addField('receipent_email_id')->group('b~8');
 		$f->icon='fa fa-envelope~blue';
 
 		$this->hasMany('xEnquiryNSubscription/CustomFields','forms_id');
 		$this->hasMany('xEnquiryNSubscription/CustomFormEntry','forms_id');
+		$this->addHook('beforeSave',$this);
 		$this->addHook('beforeDelete',$this);
 		// $this->add('dynamic_model/Controller_AutoCreator');
 	}
@@ -29,4 +30,15 @@ class Model_Forms extends \Model_Table{
 		$this->ref('xEnquiryNSubscription/CustomFields')->deleteAll();
 		$this->ref('xEnquiryNSubscription/CustomFormEntry')->deleteAll();
 	}
+
+	function beforeSave(){
+		if($this['receive_mail'] and !$this['receipent_email_id'])
+			throw $this->exception('Please specify Email Id','ValidityCheck')->setField('receipent_email_id');
+	}
+
+
+
+
 }
+
+

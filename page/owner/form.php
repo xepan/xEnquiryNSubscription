@@ -4,6 +4,12 @@ class page_xEnquiryNSubscription_page_owner_form extends page_xEnquiryNSubscript
 	function init(){
 		parent::init();
 
+		$bv = $this->add('View_BackEndView',array('cols_widths'=>array(12)));
+		$bv->addToTopBar('H3')->set('Custom Form');
+		
+		$op = $bv->addOptionButton();
+		$crud = $bv->addToColumn(0,'View');
+
 
 		$this->add('H4')->setHTML('Manage Your Custom Forms <small>And submitted data</small>');
 		$crud=$this->add('CRUD');
