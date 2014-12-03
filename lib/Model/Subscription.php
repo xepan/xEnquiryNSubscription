@@ -15,7 +15,7 @@ class Model_Subscription extends \Model_Table {
 		$f=$this->addField('email')->mandatory(true)->group('a~10');
 		$f->icon='fa fa-envelope~blue';
 
-		$f=$this->addField('is_bounced')->type('boolean')->defaultValue(false)->group('a~2');
+		$f=$this->addField('is_bounced')->type('boolean_rev')->defaultValue(0)->group('a~2')->caption('Live');
 		$f->icon='fa fa-exclamation~blue';
 		
 		$f=$this->addField('ip')->caption('IP')->group('b~6');
