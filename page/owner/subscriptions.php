@@ -75,8 +75,14 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 	}
 
 	function page_total_subscriptions(){
+		$bv = $this->add('View_BackEndView',array('cols_widths'=>array(12)));
+		$bv->addToTopBar('H3')->set('Total Subscription');
+		
+		$op = $bv->addOptionButton();
+		$crud = $bv->addToColumn(0,'View');
+
 		$subscriptions_curd = $this->add('CRUD');
-		$subscriptions_curd->setModel('xEnquiryNSubscription/Model_Subscription');
+		$subscriptions_curd->setModel('xEnquiryNSubscription/Model_Subscription',null,array('email','is_ok','created_at'));
 		if($g = $subscriptions_curd->grid){
 			$subscriptions_curd->add_button->seticon('ui-icon-plusthick');
 			// $g->sno=1;
@@ -347,8 +353,8 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 		}
 
 	}
-
-	function page_upload(){
+ 
+	function page_total_subscriptions_upload(){
 		$this->add('View')->setElement('iframe')->setAttr('src','index.php?page=xEnquiryNSubscription_page_owner_subscriptions_upload_execute&cut_page=1')->setAttr('width','100%');
 	}
 
