@@ -6,14 +6,17 @@ class View_Tools_CustomeForm extends \componentBase\View_Component{
 
 	function init(){
 		parent::init();
+			
+			if(!$this->data_options){
+				$this->add('View_Error')->set('Please Select Form Category');
+				return;
+				$this->data_options = $form['data_options'];
+			}
 			$form_model=$this->add('xEnquiryNSubscription/Model_Forms');
 			
 			$form=$this->add('Form',array('name'=>$this->api->normalizeName($form_model['name'])));
 			$form_data_options_field = $form->addField('hidden','data_options');
 
-			if(!$this->data_options){
-				$this->data_options = $form['data_options'];
-			}
 			$form_data_options_field->set($this->data_options);
 			
 			$form_model->addCondition('epan_id',$this->api->current_website->id);
@@ -44,7 +47,7 @@ class View_Tools_CustomeForm extends \componentBase\View_Component{
 				if($junk['type']=='captcha'){
 					// throw new \Exception($custome_field['type']=='captcha');
 				$captcha_field=$form->addField('line','captcha');
-				$captcha_field->belowField()->add('H4')->set('Please enter the code shown above');
+				$captcha_field->belowField()->add('H5')->set('Please enter the code shown above');
 				$captcha_field->add('x_captcha/Controller_Captcha');
 				}elseif($junk['mandatory']){
 					$field=$form->addField($custome_field['type'],$this->api->normalizeName($custome_field['name']),$custome_field['name'])->validateNotNull(true);

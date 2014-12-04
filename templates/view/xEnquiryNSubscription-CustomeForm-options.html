@@ -45,6 +45,7 @@ $('#xEnquirySubscriptioncustomServerSide').click(function(event){
 
 $('#xCustomeForm_layout_<?$id?>').change(function(event) {
 	$(current_selected_component).attr('data-options',$(this).val());
+	$(current_selected_component).univ().errorMessage('Save and reload Page to see changes');
 });
 
 var <?$component_type?>_options = {
@@ -59,7 +60,8 @@ var <?$component_type?>_options = {
 			data: {},
 			success: function(data){
 				$('#xCustomeForm_layout_<?$id?>').html(data);
-
+				console.log($(current_selected_component).attr('data-options'));
+				$('#xCustomeForm_layout_<?$id?>').val($(current_selected_component).attr('data-options'));
 			}
 		});
 	}
