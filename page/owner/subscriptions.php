@@ -80,19 +80,20 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 		$subscriptions_curd->setModel('xEnquiryNSubscription/Model_Subscription');
 		if($g = $subscriptions_curd->grid){
 			$subscriptions_curd->add_button->seticon('ui-icon-plusthick');
-			$g->sno=1;
-			$g->addMethod('format_sno',function($grid,$field){
-				$skip=0;
-				foreach ($_GET as $key => $value) {
-					if(strpos($key, '_paginator_skip') !== false) $skip = $_GET[$key];
-				}
-				$grid->current_row[$field] = $grid->sno + $skip;
-				$grid->sno++;
-			});
+			// $g->sno=1;
+			// $g->addMethod('format_sno',function($grid,$field){
+			// 	$skip=0;
+			// 	foreach ($_GET as $key => $value) {
+			// 		if(strpos($key, '_paginator_skip') !== false) $skip = $_GET[$key];
+			// 	}
+			// 	$grid->current_row[$field] = $grid->sno + $skip;
+			// 	$grid->sno++;
+			// });
 
-			$g->addColumn('sno','sno');
-			$g->addOrder()->move('sno','first')->now();
-
+			// $g->addColumn('sno','sno');
+			// $g->addOrder()->move('sno','first')->now();
+			$g->add_sno();
+			
 			$subscriptions_curd->grid->addPaginator(100);
 			$subscriptions_curd->grid->addQuickSearch(array('email'));
 			$upl_btn=$subscriptions_curd->grid->addButton('Upload Data');

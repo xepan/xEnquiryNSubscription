@@ -43,7 +43,9 @@ class page_xEnquiryNSubscription_page_emailexec extends Page {
 		foreach($email_to_process as $email){
 			$news_letter = $this->add('xEnquiryNSubscription/Model_NewsLetter');
 			$news_letter->load($this->add('xEnquiryNSubscription/Model_EmailJobs')->load($email_to_process['emailjobs_id'])->get('newsletter_id'));
-			$mailer->send($email['subscriber'],null,$news_letter->get('email_subject'),$news_letter->get('matter'),"");
+			if(!$mailer->send($email['subscriber'],null,$news_letter->get('email_subject'),$news_letter->get('matter'),"")){
+				$email_to_process->ref('subscriber_id')->set('is_bounced',true)->saveAndUnload();
+			}
 			$email_to_process['is_sent']=true;
 			$email_to_process->saveAndUnload();
 			$i++;
