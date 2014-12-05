@@ -12,6 +12,8 @@ class Model_CustomFormEntry extends \Model_Table {
 		$this->addField('create_at')->type('date')->defaultValue(date('Y-m-d'));
 		$this->addField('ip');
 		$this->addField('message')->type('text');
+		$this->addField('is_read')->type('boolean')->defaultValue(false);
+		$this->addField('watch')->type('boolean')->defaultValue(false);
 
 		// $this->add('dynamic_model/Controller_AutoCreator');
 	}

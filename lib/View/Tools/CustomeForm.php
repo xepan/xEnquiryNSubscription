@@ -117,6 +117,7 @@ class View_Tools_CustomeForm extends \componentBase\View_Component{
 						$tm->send( $form_model['receipent_email_id'], $epan['email_id'], $subject, $email_body ,false,null);
 						// throw new \Exception($form->getAllFields());
 					}catch(\Exception $e ) {
+						// $this->js()->univ()->errorMessage('Please')->execute();
 						// throw $e;
 						$alert_model=$this->add('Model_Alerts');	
 						$alert_model->createNew($this->api->current_website->id,"your email setting is not configure properly","danger","Custom Enquiry Form");	

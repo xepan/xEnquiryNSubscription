@@ -19,8 +19,18 @@ class Model_Forms extends \Model_Table{
 		$f=$this->addField('receipent_email_id')->group('b~8');
 		$f->icon='fa fa-envelope~blue';
 
+
 		$this->hasMany('xEnquiryNSubscription/CustomFields','forms_id');
 		$this->hasMany('xEnquiryNSubscription/CustomFormEntry','forms_id');
+		
+		$this->addExpression('un_read_submission')->set(function($m,$q){
+			return $m->refSQL('xEnquiryNSubscription/CustomFormEntry')
+			->addCondition(
+				$m->dsql()->orExpr()
+				->where('is_read',false)
+				->where('watch',true)
+			)->count();
+		});
 		$this->addHook('beforeSave',$this);
 		$this->addHook('beforeDelete',$this);
 		// $this->add('dynamic_model/Controller_AutoCreator');

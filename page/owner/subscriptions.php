@@ -14,12 +14,11 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 		// Add Top Bar
 		$bv = $this->add('View_BackEndView',array('cols_widths'=>array(12)));
 		$bv->addToTopBar('H3')->set('Subscription Categories');
-		
 		$op = $bv->addOptionButton();
 		$crud = $bv->addToColumn(0,'View');
 
 		$sub_cat_model= $this->add('xEnquiryNSubscription/Model_SubscriptionCategories');
-		$sub_cat_model->addExpression('last_communicated')->set(function($m,$q){
+		$sub_cat_model->addExpression('last_communicated')->sortable(true)->set(function($m,$q){
 
 			$mq=$m->add('xEnquiryNSubscription/Model_EmailQueue',array('table_alias'=>'tmq'));
 			$s_j=$mq->join('xEnquiryNSubscription_Subscription','subscriber_id');
@@ -77,7 +76,8 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 	function page_total_subscriptions(){
 		$bv = $this->add('View_BackEndView',array('cols_widths'=>array(12)));
 		$bv->addToTopBar('H3')->set('Total Subscription');
-		
+		$total_subscription=$this->setModel('xEnquiryNSubscription/Model_Subscription')->count()->getOne();
+		$bv->addToTopBar('View')->set('Total Subscriptions -'.$total_subscription);		
 		$op = $bv->addOptionButton();
 		$crud = $bv->addToColumn(0,'View');
 
@@ -153,7 +153,9 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 		// Add Top Bar
 		$bv = $this->add('View_BackEndView',array('cols_widths'=>array(12)));
 		$bv->addToTopBar('H3')->set('News Letters');
-		
+		$total_newsletter=$this->add('xEnquiryNSubscription/Model_NewsLetter');
+		$total=$total_newsletter->addCondition('created_by','xEnquiryNSubscription')->count()->getOne();
+		$bv->addToTopBar('View')->set('Total xEnquiryNSubscription NewsLetter - '.$total);
 		$op = $bv->addOptionButton($this->api->url('./config'));
 		$crud = $bv->addToColumn(0,'View');
 

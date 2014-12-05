@@ -10,7 +10,7 @@ class Model_SubscriptionCategories extends \Model_Table {
 		$this->hasOne('Epan','epan_id')->system(true);
 		$f=$this->addField('name')->mandatory(true)->group('a~8')->sortable(true);
 		$f->icon='fa fa-folder~red';
-		$f=$this->addField('is_active')->type('boolean')->defaultValue(true)->group('a~4');
+		$f=$this->addField('is_active')->type('boolean')->defaultValue(true)->group('a~4')->sortable(true);
 		$f->icon='fa fa-exclamation~blue';
 
 		$this->hasMany('xEnquiryNSubscription/HostsTouched','category_id');
