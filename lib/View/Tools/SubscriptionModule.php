@@ -60,6 +60,7 @@ class View_Tools_SubscriptionModule extends \componentBase\View_Component{
 			
 			if(!$check_existing->loaded()){
 				// No email found like this in records ... saving now
+				$check_existing['from_app']='Website';
 				$check_existing->save();
 			}else{
 				// Already in database
