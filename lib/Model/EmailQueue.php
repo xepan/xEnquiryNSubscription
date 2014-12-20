@@ -9,11 +9,11 @@ class Model_EmailQueue extends \Model_Table {
 	function init(){
 		parent::init();
 
-		$this->hasOne('xEnquiryNSubscription/EmailJobs','emailjobs_id');
-		$this->hasOne('xEnquiryNSubscription/Subscription','subscriber_id')->display(array('form'=>'autocomplete/Basic'));
-		$this->addField('email');
-		$this->addField('sent_at')->defaultValue(date('Y-m-d H:i:s'))->type('datetime');
-		$this->addField('is_sent')->type('boolean')->defaultValue(false);
+		$this->hasOne('xEnquiryNSubscription/EmailJobs','emailjobs_id')->sortable(true);
+		$this->hasOne('xEnquiryNSubscription/Subscription','subscriber_id')->display(array('form'=>'autocomplete/Basic'))->sortable(true);
+		$this->addField('email')->sortable(true);
+		$this->addField('sent_at')->defaultValue(date('Y-m-d H:i:s'))->type('datetime')->sortable(true);
+		$this->addField('is_sent')->type('boolean')->defaultValue(false)->sortable(true);
 		$this->addField('is_received')->type('boolean')->defaultValue(false);
 		$this->addField('is_read')->type('boolean')->defaultValue(false);
 		$this->addField('is_clicked')->type('boolean')->defaultValue(false);

@@ -29,11 +29,6 @@ class page_xEnquiryNSubscription_page_owner_update extends page_componentBase_pa
 
 		foreach ($model_array as $md) {
 			$model = $this->add('xEnquiryNSubscription/'.$md);
-			foreach($model->elements as $elm){
-				if($elm instanceof Field_Expression){
-					$elm->destroy();
-				}
-			}
 			$model->add('dynamic_model/Controller_AutoCreator');
 			$model->tryLoadAny();
 		}

@@ -43,18 +43,26 @@ class View_Tools_CustomeForm extends \componentBase\View_Component{
 				$form->setStyle('display','none');	
 			}
 
-			foreach ($custome_field as $junk) {		
-				if($junk['type']=='captcha'){
-					// throw new \Exception($custome_field['type']=='captcha');
-				$captcha_field=$form->addField('line','captcha');
-				$captcha_field->belowField()->add('H5')->set('Please enter the code shown above');
-				$captcha_field->add('x_captcha/Controller_Captcha');
-				}elseif($junk['mandatory']){
-					$field=$form->addField($custome_field['type'],$this->api->normalizeName($custome_field['name']),$custome_field['name'])->validateNotNull(true);
+			foreach ($custome_field as $junk) {	
+				switch ($junk['type']) {
+						case 'captcha':
+							$captcha_field=$form->addField('line','captcha');
+							$captcha_field->belowField()->add('H5')->set('Please enter the code shown above');
+							$captcha_field->add('x_captcha/Controller_Captcha');
+							break;
+						case 'email':
+							$field=$form->addField('line',$this->api->normalizeName($custome_field['name']),$custome_field['name']);
+							$field->validateField('filter_var($this->get(), FILTER_VALIDATE_EMAIL)');
+							break;
+						default:
+							$field=$form->addField($custome_field['type'],$this->api->normalizeName($custome_field['name']),$custome_field['name']);
+							break;
+					}	
+
+				if($junk['mandatory']){
+					$field->validateNotNull(true);
 				}
-				else{
-					$field=$form->addField($custome_field['type'],$this->api->normalizeName($custome_field['name']),$custome_field['name']);
-				}
+				
 
 				if($junk['type']=='dropdown'){
 					$field->setEmptyText('Please Select');
@@ -129,8 +137,9 @@ class View_Tools_CustomeForm extends \componentBase\View_Component{
 				$message_model=$this->add('Model_Messages');	
 				$message_model->createNew($this->api->current_website->id,"Custom Form Entry","Submitted : ". $form_model['name'],"Custom Enquiry Form");	
 
-				$goal_uuid = array(array('uuid'=>$form_model['name']));
+				$goal_uuid = array(array('uuid'=>$form_model['name'],'form'=>$form_model));
 				$this->api->exec_plugins('goal',$goal_uuid);
+				$this->api->event('xenq-n-subs-custom-form-submit',$goal_uuid);
 					
 				$form->js(null,$this->js()->univ()->successMessage('Thank You for Enquiry'))->reload()->execute();
 			}

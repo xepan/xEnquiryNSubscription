@@ -1,11 +1,11 @@
-<div id='<?$_name?>' class='epan-component-options' component_type="<?$component_type?>">
+<div id='{$_name}' class='epan-component-options' component_type="{$component_type}">
 
 	<div class="panel-group" id="accordion">
 		<div class="xepan-collasp-header component-header">
 		 	<div class="panel-heading">
 		      	<h3 class="panel-title">
 		        	<a data-toggle="collapse" data-parent="#accordion"	 href="#collapse-enquiry-custom">
-						<?$component_type_name?>
+						{$component_type_name}
 		        	</a>
 		      	</h3>
 		   	</div>
@@ -18,7 +18,7 @@
 								<b>Enquiry Form:- </b>
 							</td>
 							<td>
-								<select id="xCustomeForm_layout_<?$id?>">		
+								<select id="xCustomeForm_layout_{$id}">		
 								</select>
 							</td>
 						</tr>
@@ -43,12 +43,12 @@ $('#xEnquirySubscriptioncustomServerSide').click(function(event){
 	$.univ.frameURL('Custom Enquiry Form','index.php?page=xEnquiryNSubscription_page_owner_form')
 });
 
-$('#xCustomeForm_layout_<?$id?>').change(function(event) {
+$('#xCustomeForm_layout_{$id}').change(function(event) {
 	$(current_selected_component).attr('data-options',$(this).val());
 	$(current_selected_component).univ().errorMessage('Save and reload Page to see changes');
 });
 
-var <?$component_type?>_options = {
+var {$component_type}_options = {
 	show: function (){
 		// ===== THIS CODE RUNS EVERY TIME YOU DOUBLE CLICK YOUR COMPONENT
 		// TO TAKE VALUES FROM COMPONENT AND FILL OPTIONS
@@ -57,11 +57,11 @@ var <?$component_type?>_options = {
 		$.ajax({
 			url: 'index.php?page=xEnquiryNSubscription_page_getforms',
 			type: 'GET',
-			data: {},
+			data: { },
 			success: function(data){
-				$('#xCustomeForm_layout_<?$id?>').html(data);
+				$('#xCustomeForm_layout_{$id}').html(data);
 				console.log($(current_selected_component).attr('data-options'));
-				$('#xCustomeForm_layout_<?$id?>').val($(current_selected_component).attr('data-options'));
+				$('#xCustomeForm_layout_{$id}').val($(current_selected_component).attr('data-options'));
 			}
 		});
 	}

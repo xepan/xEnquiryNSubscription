@@ -19,7 +19,7 @@ class Model_EmailJobs extends \Model_Table {
 			return $m->refSQL('newsletter_id')->fieldQuery('name');
 		});
 
-		$this->addField('process_via')->system(true);
+		$this->addField('process_via')->system(true)->defaultValue('xEnquiryNSubscription');
 
 		$this->addExpression('processed_in_hour')->set('DATE_FORMAT(processed_on,"%Y-%m-%d %H:00:00")');
 

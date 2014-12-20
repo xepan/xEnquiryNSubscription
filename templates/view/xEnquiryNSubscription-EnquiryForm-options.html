@@ -1,10 +1,10 @@
-<div id='<?$_name?>' class='epan-component-options' component_type="<?$component_type?>">
+<div id='{$_name}' class='epan-component-options' component_type="{$component_type}">
 	<div class="panel-group" id="accordion">
 		<div class="xepan-collasp-header component-header">
 		 	<div class="panel-heading">
 		      	<h3 class="panel-title">
 		        	<a data-toggle="collapse" data-parent="#accordion"	 href="#collapse-enquiry-basic">
-						<?$component_type_name?>
+						{$component_type_name}
 		        	</a>
 		      	</h3>
 		   	</div>
@@ -83,7 +83,7 @@ $('#epan-component-option-form-elements').sortable({
 		epan_form_option_item_moving = ui.item.index();
 	}
 });
-var <?$component_type?>_options = {
+var {$component_type}_options = {
 show: function (){
 $('#epan-enquiryform-option-receipent').val($(current_selected_component).attr('email_to'));
 $('#epan-component-option-form-elements').children().remove();

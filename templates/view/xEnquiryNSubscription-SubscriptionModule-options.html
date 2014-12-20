@@ -1,11 +1,11 @@
-<div id='<?$_name?>' class='epan-component-options' component_type="<?$component_type?>">
+<div id='{$_name}' class='epan-component-options' component_type="{$component_type}">
 
 	<div class="panel-group" id="accordion">
 		<div class="xepan-collasp-header component-header">
 		 	<div class="panel-heading">
 		      	<h3 class="panel-title">
 		        	<a data-toggle="collapse" data-parent="#accordion"	 href="#collapse-enquiry-subscription">
-						<?$component_type_name?>
+						{$component_type_name}
 		        	</a>
 		      	</h3>
 		   	</div>
@@ -47,7 +47,7 @@ $('#xEnquiryNSubscription_Subscription_Categories').change(function(event) {
 	$(current_selected_component).univ().errorMessage('Save and reload Page to see changes');
 });
 
-var <?$component_type?>_options = {
+var {$component_type}_options = {
 	show: function (){
 		$.ajax({
 			url: 'index.php?page=xEnquiryNSubscription_page_subscribecats&cut_page=1',

@@ -44,11 +44,14 @@ class Model_Forms extends \Model_Table{
 	function beforeSave(){
 		if($this['receive_mail'] and !$this['receipent_email_id'])
 			throw $this->exception('Please specify Email Id','ValidityCheck')->setField('receipent_email_id');
+
+		$name_check =$this->add('xEnquiryNSubscription/Model_Forms');
+		$name_check->addCondition('name',$this['name']);
+		$name_check->addCondition('id','<>',$this->id);
+		$name_check->tryLoadAny();
+
+		if($name_check->loaded())
+			throw $this->exception('Name Already Taken','ValidityCheck')->setField('name');
+
 	}
-
-
-
-
 }
-
-

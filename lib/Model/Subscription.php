@@ -25,7 +25,7 @@ class Model_Subscription extends \Model_Table {
 		// $this->addField('send_news_letters')->type('boolean')->defaultValue(true);
 
 
-		$this->addField('from_app')->system(true);
+		$this->addField('from_app')->system(true)->defaultValue('xEnquiryNSubscription')->sortable(true);
 		$this->addField('from_id')->type('int')->system(true);
 
 		$this->addExpression('name')->set('email');
@@ -34,7 +34,7 @@ class Model_Subscription extends \Model_Table {
 		$this->addHook('beforeSave',$this);
 		$this->addHook('beforeDelete',$this);
 
-		// $this->add('dynamic_model/Controller_AutoCreator');
+		$this->add('dynamic_model/Controller_AutoCreator');
 
 	}
 

@@ -6,7 +6,7 @@ class page_xEnquiryNSubscription_page_owner_dashboard extends page_xEnquiryNSubs
 		parent::init();
 
 		$total_emails =$this->add('xEnquiryNSubscription/Model_Subscription');
-		$dv = $this->add('View_BackEndView',array('cols_widths'=>array(12)));
+		$dv = $this->app->layout->add('View_BackEndView',array('cols_widths'=>array(12)));
 		$mail=$total_emails->addCondition('from_app','xEnquiryNSubscription')->count()->getOne();		
 		$dv->addToTopBar('View')->setHTML('Web Subscription -'.$mail)->addClass('label label-info');
 		

@@ -17,8 +17,17 @@ class Model_SubscriptionCategories extends \Model_Table {
 		$this->hasMany('xEnquiryNSubscription/Model_SubscriptionCategoryAssociation','category_id');
 
 		$this->addExpression('total_emails')->set(function($m,$q){
-			return $m->refSQL('xEnquiryNSubscription/Model_SubscriptionCategoryAssociation')->count();
-		})->type('int')->sortable(true);
+			$mq=$m->add('xEnquiryNSubscription/Model_Subscription',array('table_alias'=>'tmq'));
+			// $s_j=$mq->join('xEnquiryNSubscription_Subscription','subscriber_id');
+			$as_j=$mq->join('xEnquiryNSubscription_SubsCatAss.subscriber_id');
+			$as_j->addField('category_id');
+
+			$mq->addCondition('category_id',$q->getField('id'));
+			// $mq->addCondition('from_app','xEnquiryNSubscription');
+			return $mq->count();
+			
+			// return $m->refSQL('xEnquiryNSubscription/Model_SubscriptionCategoryAssociation')->count();
+		})->type('int')->sortable(true)->caption('Total Assos Emails');
 		
 		$this->addHook('beforeSave',$this);
 		$this->addHook('afterInsert',$this);
@@ -68,7 +77,7 @@ class Model_SubscriptionCategories extends \Model_Table {
 		if(!$this->loaded()) throw $this->exception('Must be called on loaded Subscriber Category Model');
 		if($subscriber instanceof Subscription) throw $this->exception('Subscriber Must be instance of Subscription Model');
 
-		if(!$subscriber->loaded()) throw $this->exception('Subscriber Must be LOADED instance of Subscription Model');
+		if(!$subscriber->loaded()) return false;
 
 		$asso = $this->add('xEnquiryNSubscription/Model_SubscriptionCategoryAssociation');
 		$asso->addCondition('category_id',$this->id);

@@ -7,13 +7,13 @@ class Model_CustomFormEntry extends \Model_Table {
 		parent::init();
 		$this->hasOne('Epan','epan_id');
 		$this->addCondition('epan_id',$this->api->current_website->id);
-		$this->hasOne('xEnquiryNSubscription/Forms','forms_id');
+		$this->hasOne('xEnquiryNSubscription/Forms','forms_id')->caption('Form');
 
 		$this->addField('create_at')->type('date')->defaultValue(date('Y-m-d'));
-		$this->addField('ip');
-		$this->addField('message')->type('text');
-		$this->addField('is_read')->type('boolean')->defaultValue(false);
-		$this->addField('watch')->type('boolean')->defaultValue(false);
+		$this->addField('ip')->sortable(true);
+		$this->addField('message')->type('text')->display(array('form'=>'RichText'));
+		$this->addField('is_read')->type('boolean')->defaultValue(false)->sortable(true);
+		$this->addField('watch')->type('boolean')->defaultValue(false)->sortable(true);
 
 		// $this->add('dynamic_model/Controller_AutoCreator');
 	}
