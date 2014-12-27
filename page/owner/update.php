@@ -32,7 +32,7 @@ class page_xEnquiryNSubscription_page_owner_update extends page_componentBase_pa
 		foreach ($model_array as $md) {
 			$model = $this->add('xEnquiryNSubscription/'.$md);
 			foreach ($model->elements as $elm) {
-				if($elm instanceof SQL_Many or $lem instanceof Field_Expression)
+				if($elm instanceof Field_Expression)
 					$elm->destroy();
 			}
 
