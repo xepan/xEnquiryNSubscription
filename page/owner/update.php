@@ -10,7 +10,9 @@ class page_xEnquiryNSubscription_page_owner_update extends page_componentBase_pa
 		// 
 		// Code To run before installing
 		
-		$this->update(false);
+
+		if(!$_GET['pass-git'])
+			$this->update(false);
 
 		$model_array=array(
 			'Model_SubscriptionCategoryAssociation',
@@ -29,6 +31,11 @@ class page_xEnquiryNSubscription_page_owner_update extends page_componentBase_pa
 
 		foreach ($model_array as $md) {
 			$model = $this->add('xEnquiryNSubscription/'.$md);
+			foreach ($model->elements as $elm) {
+				if($elm instanceof SQL_Many or $lem instanceof Field_Expression)
+					$elm->destroy();
+			}
+
 			$model->add('dynamic_model/Controller_AutoCreator');
 			$model->tryLoadAny();
 		}

@@ -23,18 +23,7 @@ class Model_EmailQueue extends \Model_Table {
 	}
 
 	function processSingle(){
-
-		if(!$this->mailer_object){
-			$mass_email = $this->add('xEnquiryNSubscription/Model_MassEmailConfiguration')->tryLoadAny();
-			if($mass_email->loaded() and $mass_email['use_mandril'] and $mass_email['mandril_api_key']){
-				$mailer  = new Mandrill($mass_email['mandril_api_key'],$this->api);
-			}else{
-				$mailer = $this->add('TMail_Transport_PHPMailer');
-			}
-		}else{
-			$mailer = $this->mailer_object;
-		}
-
+	
 		$news_letter = $this->ref('emailjobs_id')->ref('newsletter_id');
 		
 		if(!$this->mailer_object){

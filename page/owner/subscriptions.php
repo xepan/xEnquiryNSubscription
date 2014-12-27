@@ -279,7 +279,7 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 
 		$v=$this->add('View');
 		$v->addClass('panel panel-danger');
-		// $v->addStyle('padding','20px');
+		$v->addStyle('padding','20px');
 
 		$config_form = $v->add('Form');
 		$config_model=$this->add('xEnquiryNSubscription/Model_SubscriptionConfig');
