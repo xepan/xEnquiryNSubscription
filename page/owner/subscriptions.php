@@ -273,7 +273,7 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 
 	}
 
-	function page_total_categories_config(){
+	   function page_total_categories_config(){
 
 		$this->api->stickyGET('xEnquiryNSubscription_Subscription_Categories_id');
 
@@ -297,7 +297,7 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 		// $config_form->add('Controller_FormBeautifier',array('modifier'=>'default'));
 
 	}
-
+                                                         
 	function page_newsletter(){
 
 		$preview_vp = $this->add('VirtualPage');
