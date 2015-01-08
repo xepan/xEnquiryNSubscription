@@ -51,7 +51,7 @@ class page_xEnquiryNSubscription_page_owner_form extends page_xEnquiryNSubscript
 			$form_values->grid->addColumn('Button','Keep_Watch');
 
 			$g->addMethod('format_message',function($g,$f)use($message_vp){
-				$g->current_row_html[$f]='<a href="javascript:void(0)" onclick="'.$g->js()->univ()->frameURL('Message',$this->api->url($message_vp->getURL(),array('form_submission_id'=>$g->model->id))).'">'.$g->current_row[$f].'</a>';
+				$g->current_row_html[$f]='<a href="javascript:void(0)" onclick="'.$g->js()->univ()->frameURL('Message',$g->api->url($message_vp->getURL(),array('form_submission_id'=>$g->model->id))).'">'.$g->current_row[$f].'</a>';
 			});
 
 			$g->addFormatter('message','message');

@@ -89,19 +89,29 @@ class View_Tools_CustomeForm extends \componentBase\View_Component{
 				// throw new \Exception(print_r($form->getAllFields(),true));
 				if(!$form_model['receipent_email_id'])
 					$this->js()->univ()->errorMessage('Please Insert Receipent Email id')->execute();
+				$email = "";
+				$form_values="";
+				foreach ($custome_field as $junk) {
+					$form_values .= "<b>".$custome_field['name']."</b> : " . $form[$this->api->normalizeName($custome_field['name'])] . '<br/>';
+					if($junk['type'] == 'email'){
+						$email = $form[$this->api->normalizeName($custome_field['name'])];
+					}
+				}
+				//
+				$subs_model = $this->add('xEnquiryNSubscription/Model_Subscription');
+				$subs_model['email'] = $email;
+				$subs_model['from_app'] = "xEnquiryNSubscription/CustomForm";
+				$subs_model['from_id'] = $form_model->id;
+				$email ? $subs_model->save():"";
 
 				$epan=$this->api->current_website;
 
 				$form_entry_model=$this->add('xEnquiryNSubscription/Model_CustomFormEntry');
 				$tm=$this->add( 'TMail_Transport_PHPMailer' );
 			
-				$msg=$this->add( 'SMLite' );
+				$msg=$this->add( 'GiTemplate' );
 				$msg->loadTemplate( 'mail/xEnquiryNSubscripition_customeform' );
 
-				$form_values="";
-				foreach ($custome_field as $junk) {
-					$form_values .= "<b>".$custome_field['name']."</b> : " . $form[$this->api->normalizeName($custome_field['name'])] . '<br/>';
-				}
 
 				if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
 			    	$ip = $_SERVER['HTTP_CLIENT_IP'];
