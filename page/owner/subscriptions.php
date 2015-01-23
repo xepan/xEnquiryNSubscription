@@ -29,7 +29,7 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 			$as_j->addField('subscribed_on')->sortable(true);
 
 			$m->addCondition('category_id',$_GET['category_id']);
-			$m->addCondition('from_app','xEnquiryNSubscription');
+			$m->addCondition('from_app','Website');
 
 			$un_sub_m=$p->add('xEnquiryNSubscription/Model_Subscription');
 			$as_j=$un_sub_m->join('xEnquiryNSubscription_SubsCatAss.subscriber_id');
@@ -66,7 +66,7 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 			$as_j->addField('subscribed_on')->sortable(true);
 
 			$m->addCondition('category_id',$_GET['category_id']);
-			$m->addCondition('from_app','<>','xEnquiryNSubscription');
+			$m->addCondition('from_app','<>','Website');
 
 			$un_sub_m=$p->add('xEnquiryNSubscription/Model_Subscription');
 			$as_j=$un_sub_m->join('xEnquiryNSubscription_SubsCatAss.subscriber_id');
@@ -117,7 +117,7 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 			$as_j->addField('category_id');
 
 			$mq->addCondition('category_id',$q->getField('id'));
-			$mq->addCondition('from_app','xEnquiryNSubscription');
+			$mq->addCondition('from_app','Website');
 			return $mq->count();
 		});
 
@@ -130,7 +130,7 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 			$as_j->addField('category_id');
 
 			$mq->addCondition('category_id',$q->getField('id'));
-			$mq->addCondition($mq->dsql()->orExpr()->where('from_app','<>','xEnquiryNSubscription')->where('from_app',null));
+			$mq->addCondition($mq->dsql()->orExpr()->where('from_app','<>','Website')->where('from_app',null));
 			return $mq->count();
 		});
 
