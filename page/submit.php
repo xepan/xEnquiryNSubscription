@@ -22,7 +22,7 @@ class page_xEnquiryNSubscription_page_submit extends Page {
 		$email_to = $_REQUEST['email_to'];
 
 		if($_REQUEST['email_to'] == '')
-			$email_to = $this->api->current_epan['email_id'];
+			$email_to = $this->api->current_website['email_id'];
 
 		if($email_to == '')
 			$this->js()->univ()->errorMessage('Opps! Email not set')->execute();
@@ -35,7 +35,7 @@ class page_xEnquiryNSubscription_page_submit extends Page {
 		}
 		
 		$tm=$this->add( 'TMail_Transport_PHPMailer' );
-		$msg=$this->add( 'SMLite' );
+		$msg=$this->add( 'GiTemplate' );
 		$msg->loadTemplate( 'mail/enquiryform' );
 
 		$msg->trySet('epan',$this->api->current_website['name']);
