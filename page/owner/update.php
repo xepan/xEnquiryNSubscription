@@ -6,41 +6,7 @@ class page_xEnquiryNSubscription_page_owner_update extends page_componentBase_pa
 
 	function init(){
 		parent::init();
-
-		// 
-		// Code To run before installing
-		
-
-		if(!$_GET['pass-git'])
-			$this->update(false);
-
-		$model_array=array(
-			'Model_SubscriptionCategoryAssociation',
-			'Model_SubscriptionCategories',
-			'Model_Subscription',
-			'Model_SubscriptionConfig',
-			'Model_NewsLetter',
-			'Model_Forms',
-			'Model_EmailJobs',
-			'Model_EmailQueue',
-			'Model_CustomFormEntry',
-			'Model_CustomFields',
-			'Model_MassEmailConfiguration',
-			'Model_HostsTouched',
-			);
-
-		foreach ($model_array as $md) {
-			$model = $this->add('xEnquiryNSubscription/'.$md);
-			foreach ($model->elements as $elm) {
-				if($elm instanceof Field_Expression)
-					$elm->destroy();
-			}
-
-			$model->add('dynamic_model/Controller_AutoCreator');
-			$model->tryLoadAny();
-		}
-
-		
+		$this->update();
 		$this->add('View_Info')->set('Component Is SuccessFully Updated');
 		// Code to run after installation
 	}

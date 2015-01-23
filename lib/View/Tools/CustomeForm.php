@@ -46,9 +46,9 @@ class View_Tools_CustomeForm extends \componentBase\View_Component{
 			foreach ($custome_field as $junk) {	
 				switch ($junk['type']) {
 						case 'captcha':
-							$captcha_field=$form->addField('line','captcha');
-							$captcha_field->belowField()->add('H5')->set('Please enter the code shown above');
-							$captcha_field->add('x_captcha/Controller_Captcha');
+							$field=$form->addField('line','captcha');
+							$field->belowField()->add('H5')->set('Please enter the code shown above');
+							$field->add('x_captcha/Controller_Captcha');
 							break;
 						case 'email':
 							$field=$form->addField('line',$this->api->normalizeName($custome_field['name']),$custome_field['name']);
@@ -89,19 +89,29 @@ class View_Tools_CustomeForm extends \componentBase\View_Component{
 				// throw new \Exception(print_r($form->getAllFields(),true));
 				if(!$form_model['receipent_email_id'])
 					$this->js()->univ()->errorMessage('Please Insert Receipent Email id')->execute();
+				$email = "";
+				$form_values="";
+				foreach ($custome_field as $junk) {
+					$form_values .= "<b>".$custome_field['name']."</b> : " . $form[$this->api->normalizeName($custome_field['name'])] . '<br/>';
+					if($junk['type'] == 'email'){
+						$email = $form[$this->api->normalizeName($custome_field['name'])];
+					}
+				}
+				//
+				$subs_model = $this->add('xEnquiryNSubscription/Model_Subscription');
+				$subs_model['email'] = $email;
+				$subs_model['from_app'] = "xEnquiryNSubscription/CustomForm";
+				$subs_model['from_id'] = $form_model->id;
+				$email ? $subs_model->save():"";
 
 				$epan=$this->api->current_website;
 
 				$form_entry_model=$this->add('xEnquiryNSubscription/Model_CustomFormEntry');
 				$tm=$this->add( 'TMail_Transport_PHPMailer' );
 			
-				$msg=$this->add( 'SMLite' );
+				$msg=$this->add( 'GiTemplate' );
 				$msg->loadTemplate( 'mail/xEnquiryNSubscripition_customeform' );
 
-				$form_values="";
-				foreach ($custome_field as $junk) {
-					$form_values .= "<b>".$custome_field['name']."</b> : " . $form[$this->api->normalizeName($custome_field['name'])] . '<br/>';
-				}
 
 				if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
 			    	$ip = $_SERVER['HTTP_CLIENT_IP'];
@@ -126,7 +136,7 @@ class View_Tools_CustomeForm extends \componentBase\View_Component{
 						// throw new \Exception($form->getAllFields());
 					}catch(\Exception $e ) {
 						// $this->js()->univ()->errorMessage('Please')->execute();
-						// throw $e;
+						throw $e;
 						$alert_model=$this->add('Model_Alerts');	
 						$alert_model->createNew($this->api->current_website->id,"your email setting is not configure properly","danger","Custom Enquiry Form");	
 						return;
