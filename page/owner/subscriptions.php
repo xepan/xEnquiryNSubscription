@@ -27,6 +27,7 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 			$as_j->addField('category_id');
 			$as_j->addField('send_news_letters')->type('boolean');
 			$as_j->addField('subscribed_on')->sortable(true);
+			$as_j->addField('last_updated_on')->sortable(true);
 
 			$m->addCondition('category_id',$_GET['category_id']);
 			$m->addCondition('from_app','Website');
@@ -225,7 +226,11 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 
 
 		$subscriptions_curd = $this->add('CRUD');
-		$subscriptions_curd->setModel('xEnquiryNSubscription/Model_Subscription',null,array('email','is_ok','created_at'));
+		$total_subcription_model=$this->add('xEnquiryNSubscription/Model_Subscription');
+		$total_subcription_model->addExpression('last_updated_on',function($m,$q){
+			return $m->refSQL('xEnquiryNSubscription/SubscriptionCategoryAssociation')->setLimit(1)->setOrder('last_updated_on','desc')->fieldQuery('last_updated_on');			
+		})->sortable(true);	
+		$subscriptions_curd->setModel($total_subcription_model,null,array('email','is_ok','created_at','last_updated_on'));
 		if(!$subscriptions_curd->isEditing()){
 			$g = $subscriptions_curd->grid;	
 			$subscriptions_curd->add_button->seticon('ui-icon-plusthick');
