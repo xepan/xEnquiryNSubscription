@@ -262,7 +262,7 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 		}
 		// $subscriptions_curd->add('Controller_FormBeautifier');
 
-		$cat_ref_subs_crud = $subscriptions_curd->addRef('xEnquiryNSubscription/Model_SubscriptionCategoryAssociation',array('label'=>'Categories'));
+		$cat_ref_subs_crud = $subscriptions_curd->addRef('xEnquiryNSubscription/SubscriptionCategoryAssociation',array('label'=>'Categories'));
 
 		if($cat_ref_subs_crud){
 			// $cat_ref_subs_crud->add('Controller_FormBeautifier');
@@ -626,11 +626,12 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 						$new_category->save();
 						$stored_categories[$new_category->id] = $new_category['name'];
 					}else{
+						$new_category = $this->add('xEnquiryNSubscription/Model_SubscriptionCategories');
 						$new_category->load(array_search($d['Category'], $stored_categories));
 					}
 
 					$new_subscription = $this->add('xEnquiryNSubscription/Model_Subscription');
-					$new_subscription->addCondition('email', $d['Email']);
+					$new_subscription->addCondition('email', trim($d['Email']));
 					$new_subscription->tryLoadAny();
 					$new_subscription['send_news_letters'] = $d['Send News Letters'];
 					$new_subscription['subscribed_on'] = date('Y-m-d',strtotime($d['Subscribed On']));

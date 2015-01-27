@@ -53,6 +53,6 @@ class Model_Subscription extends \Model_Table {
 
 	}
 	function beforeDelete(){
-		$this->ref('xEnquiryNSubscription/Model_SubscriptionCategoryAssociation')->deleteAll();
+		$this->ref('xEnquiryNSubscription/SubscriptionCategoryAssociation')->deleteAll();
 	}
 }
