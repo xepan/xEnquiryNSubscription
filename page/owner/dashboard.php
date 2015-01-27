@@ -40,6 +40,39 @@ class page_xEnquiryNSubscription_page_owner_dashboard extends page_xEnquiryNSubs
 			
 		$dv_op = $dv->addOptionButton();
 		$crud = $dv->addToColumn(0,'View');
+
+
+
+		
+		$chart=$this->app->layout->add('chart/Chart');
+
+		$m=$this->add('xEnquiryNSubscription/Model_Subscription');
+		// $m->addCondition('from_app','Website');
+		$m->_dsql()->del('fields')
+								->field('from_app')
+								->field('count(*) subs')
+								->field('date(created_at) dt')
+								// ->where('created_at','>',date("Y_m-d",strtotime("- 1 month")))
+								->group('from_app,date(created_at)');
+		$x=$m->_dsql()->getAll();	
+		// echo "<pre>";
+		// print_r($x);							
+		// echo "</pre>";
+		// exit;							
+		foreach($x as $junk) {
+			// $m->addCondition('from_app','Website');
+			$y=$chart->addLineData($junk['from_app'],$junk['dt'],(int)$junk['subs']);
+		}
+		echo $y;
+
+		// $chart->addLineData('Website','2',15);
+		$chart
+		->setXAxisTitle('Dates')
+		// ->setXAxis($xaxis)
+		->setYAxisTitle('Total Subscription')
+		->setTitle('Subscription Status',null,'sub Tittle')
+		->setChartType('line')
+		;
 	}
 
 }
