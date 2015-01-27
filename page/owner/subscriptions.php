@@ -304,13 +304,14 @@ class page_xEnquiryNSubscription_page_owner_subscriptions extends page_xEnquiryN
 	}
                                                          
 	function page_newsletter(){
-
+		$this->api->jui->addStaticInclude('splitter/splitter');
+		$this->api->jui->addStylesheet('splitter/splitter');
 		$preview_vp = $this->add('VirtualPage');
 		$preview_vp->set(function($p){
 			$m=$p->add('xEnquiryNSubscription/Model_NewsLetter')->load($_GET['newsletter_id']);
 			try{
 
-			$p->add('View')->set('Created '. $this->add('xDate')->diff(Carbon::now(),$m['created_at']) .', Last Modified '. $this->add('xDate')->diff(Carbon::now(),$m['updated_at']) )->addClass('atk-size-micro pull-right')->setStyle('color','#555');
+			$p->add('View')->set('Created '. $p->add('xDate')->diff(Carbon::now(),$m['created_at']) .', Last Modified '. $this->add('xDate')->diff(Carbon::now(),$m['updated_at']) )->addClass('atk-size-micro pull-right')->setStyle('color','#555');
 			}catch(Exception $e){
 				echo $e->getMessage();
 			}
