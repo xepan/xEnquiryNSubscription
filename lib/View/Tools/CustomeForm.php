@@ -96,6 +96,12 @@ class View_Tools_CustomeForm extends \componentBase\View_Component{
 					if($junk['type'] == 'email'){
 						$email = $form[$this->api->normalizeName($custome_field['name'])];
 					}
+
+					if($junk['type'] == 'captcha'){
+						 if (!$form->getElement('captcha')->captcha->isSame($form->get('captcha'))){
+						 	$form->displayError('captcha','Wrong captcha');
+						 }
+					}
 				}
 				//
 				$subs_model = $this->add('xEnquiryNSubscription/Model_Subscription');
