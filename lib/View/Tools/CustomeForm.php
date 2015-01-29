@@ -92,7 +92,8 @@ class View_Tools_CustomeForm extends \componentBase\View_Component{
 				$email = "";
 				$form_values="";
 				foreach ($custome_field as $junk) {
-					$form_values .= "<b>".$custome_field['name']."</b> : " . $form[$this->api->normalizeName($custome_field['name'])] . '<br/>';
+					if($junk['type']!='captcha')
+						$form_values .= "<b>".$custome_field['name']."</b> : " . $form[$this->api->normalizeName($custome_field['name'])] . '<br/>';
 					if($junk['type'] == 'email'){
 						$email = $form[$this->api->normalizeName($custome_field['name'])];
 					}
@@ -151,7 +152,7 @@ class View_Tools_CustomeForm extends \componentBase\View_Component{
 				}
 
 				$message_model=$this->add('Model_Messages');	
-				$message_model->createNew("Custom Form Entry",$form_model['name'],$form_values,"Custom Enquiry Form",'xEnquiryNSubscription');	
+				$message_model->createNew("Custom Form Entry", $form_values,"Custom Enquiry Form",'xEnquiryNSubscription');	
 
 				$goal_uuid = array(array('uuid'=>$form_model['name'],'form'=>$form_model));
 				$this->api->exec_plugins('goal',$goal_uuid);
